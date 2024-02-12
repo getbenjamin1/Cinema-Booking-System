@@ -1,163 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cinema Booking</title>
-  <style>
-    body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinema Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Disable horizontal scrollbar */
+        }
 
-header {
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  padding: 1em 0;
-}
+        header {
+            background-color: #152238;
+            color: #fff;
+            text-align: center;
+            padding: 1em 0;
+            position: relative;
+        }
 
-section {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
+        #search-bar {
+            position: absolute;
+            top: 0;
+            right: 20px;
+            color: #fff;
+        }
 
-h2 {
-  color: #333;
-}
+        #search-bar label {
+            color: #fff; /* Set the color to white */
+            font-weight: normal; /* Adjusted font weight */
+        }
 
-.movie {
-  cursor: pointer;
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin-bottom: 20px;
-  transition: transform 0.3s;
-}
+        #search-results {
+            margin-top: 10px;
+        }
 
-.movie:hover {
-  transform: scale(1.05);
-}
+        section {
+            display: flex;
+            flex-direction: column;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px; /* Added padding to prevent content from being overlapped by fixed header */
+        }
 
-.movie img {
-  width: 100%;
-  height: auto;
-}
+        #movies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
 
-#movieDetails {
-  display: none;
-  margin-top: 20px;
-}
+        h2 {
+            color: #152238;
+        }
 
-#movieDetails h3 {
-  color: #333;
-}
+        .movie {
+            flex-basis: calc(33.33% - 20px);
+            cursor: pointer;
+            border: 1px solid #ccc;
+            padding: 10px;
+            transition: transform 0.3s;
+            box-sizing: border-box;
+        }
 
-#movieDetails img {
-  max-width: 100%;
-  height: auto;
-  margin-bottom: 10px;
-}
+        .movie:hover {
+            transform: scale(1.05);
+        }
 
-#booking {
-  margin-top: 40px;
-}
+        .movie img {
+            width: 100%;
+            height: auto;
+        }
 
-form {
-  display: flex;
-  flex-direction: column;
-}
+        #movieDetails {
+            display: none;
+            margin-top: 20px;
+        }
 
-label {
-  margin-bottom: 8px;
-  color: #333;
-}
+        #movieDetails h3 {
+            color: #333;
+        }
 
-input {
-  padding: 8px;
-  margin-bottom: 16px;
-}
+        #movieDetails img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
 
-button {
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
-  cursor: pointer;
-}
+        #booking {
+            margin-top: 40px;
+        }
 
-button:hover {
-  background-color: #555;
-}
+        form {
+            display: flex;
+            flex-direction: column;
+        }
 
-footer {
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  padding: 1em 0;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
+        label {
+            margin-bottom: 8px;
+            color: #333;
+        }
 
-  </style>
+        input {
+            padding: 8px;
+            margin-bottom: 16px;
+        }
+
+        button {
+            background-color: #152238;
+            color: #fff;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        footer {
+            background-color: #152238;
+            color: #fff;
+            text-align: center;
+            padding: 1em 0;
+            position: relative;
+            clear: both;
+        }
+    </style>
 </head>
+
 <body>
-  <header>
-    <h1>Deemanbr Cinema</h1>
-  </header>
+    <header>
+        <h1>Debianem Cinema</h1>
+        <div id="search-bar">
+            <label for="search">Search:</label>
+            <input type="text" id="search" placeholder="Enter keywords" oninput="searchMovies()">
+            <div id="search-results"></div>
+        </div>
+    </header>
 
-  <section id="movies">
-    <h2>Now Showing</h2>
-    <div class="movie" onclick="showMovieDetails('movie1')">
-      <img src="movie1.jpg" alt="Movie 1">
-      <p>Movie 1</p>
-    </div>
-    <!-- Add more movies as needed -->
+    <section>
+        <h2>Now Showing</h2>
+        <div id="movies">
+            <div class="movie" onclick="showMovieDetails('movie1')">
+                <img src="movie1.jpg" alt="Movie 1">
+                <p>Movie 1</p>
+            </div>
+            <div class="movie" onclick="showMovieDetails('movie2')">
+                <img src="movie2.jpg" alt="Movie 2">
+                <p>Movie 2</p>
+            </div>
+            <div class="movie" onclick="showMovieDetails('movie3')">
+                <img src="movie3.jpg" alt="Movie 3">
+                <p>Movie 3</p>
+            </div>
+            <div class="movie" onclick="showMovieDetails('movie4')">
+                <img src="movie4.jpg" alt="Movie 4">
+                <p>Movie 4</p>
+            </div>
+            <div class="movie" onclick="showMovieDetails('movie5')">
+              <img src="movie5.jpg" alt="Movie 5">
+              <p>Movie 5</p>
+          </div>
+          <div class="movie" onclick="showMovieDetails('movie6')">
+            <img src="movie6.jpg" alt="Movie 6">
+            <p>Movie 6</p>
+        </div>
+            <!-- Add more movies as needed -->
 
-    <div id="movieDetails" class="hidden">
-      <h3>Movie Details</h3>
-      <img id="movieImage" src="" alt="Movie">
-      <p id="movieDescription"></p>
-      <button onclick="bookTicket()">Book Ticket</button>
-    </div>
-  </section>
+            <div id="movieDetails" class="hidden">
+                <h3>Movie Details</h3>
+                <img id="movieImage" src="" alt="Movie">
+                <p id="movieDescription"></p>
+                <button onclick="bookTicket()">Book Ticket</button>
+            </div>
+        </div>
+    </section>
 
-  <section id="booking">
-    <h2>Booking Details</h2>
-    <form id="bookingForm">
-      <label for="name">Name:</label>
-      <input type="text" id="name" required>
+    <section id="booking">
+        <h2>Booking Details</h2>
+        <form id="bookingForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
 
-      <label for="email">Email:</label>
-      <input type="email" id="email" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
 
-      <label for="seats">Number of Seats:</label>
-      <input type="number" id="seats" min="1" required>
+            <label for="seats">Number of Seats:</label>
+            <input type="number" id="seats" min="1" required>
 
-      <button type="submit">Confirm Booking</button>
-    </form>
-  </section>
+            <button type="submit">Confirm Booking</button>
+        </form>
+    </section>
 
-  <footer>
-    <p>&copy; 2024 Debianem Cinema</p>
-  </footer>
+    <footer>
+        <p>&copy; 2024 Debianem Cinema</p>
+    </footer>
 
-  <script>
-    function showMovieDetails(movieId) {
-      // Fetch movie details from your database using AJAX or any other method
-      // Update the #movieDetails section with the details
-      // Set the image source, description, etc.
-      document.getElementById('movieDetails').classList.remove('hidden');
-    }
+    <script>
+        function showMovieDetails(movieId) {
+            // Fetch movie details from your database using AJAX or any other method
+            // Update the #movieDetails section with the details
+            // Set the image source, description, etc.
+            document.getElementById('movieDetails').classList.remove('hidden');
+        }
 
-    function bookTicket() {
-      // Implement the ticket booking logic
-      // You may want to send the booking details to the server
-      alert('Ticket booked successfully!');
-    }
+        function bookTicket() {
+            // Implement the ticket booking logic
+            // You may want to send the booking details to the server
+            alert('Ticket booked successfully!');
+        }
 
-    // Add any additional JavaScript functions as needed
-  </script>
+        function searchMovies() {
+            // Implement movie search logic
+        }
+    </script>
 </body>
+
 </html>
