@@ -1,5 +1,7 @@
 # Setup Instructions
 
+Git clone or download src as zip and extract.
+
 Install MySQL. Can be MariaDB / MySQL it should not matter.
 ```
 CREATE DATABASE debianem;
