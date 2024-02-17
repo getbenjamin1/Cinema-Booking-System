@@ -10,7 +10,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            overflow-x: hidden; /* Disable horizontal scrollbar */
+            overflow-x: hidden;
         }
 
         header {
@@ -26,9 +26,9 @@
     top: 0;
     right: 0;
     color: #fff;
-    height: 50px; /* Adjust the height as per your preference */
+    height: 50px; 
     padding: 10px;
-    background-color: #152238; /* Add background color for better visibility */
+    background-color: #152238;
 }
 
 #search-bar label {
@@ -37,13 +37,13 @@
 }
 
 #search-bar input {
-    height: 100%; /* Make the input fill the entire height of the search bar */
+    height: 100%;
     padding: 10px;
     box-sizing: border-box;
 }
 
 #search-results {
-    margin-top: 60px; /* Adjust the margin to create space below the search bar */
+    margin-top: 60px;
 }
 
 
@@ -53,7 +53,7 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            padding-top: 80px; /* Added padding to prevent content from being overlapped by fixed header */
+            padding-top: 80px;
         }
 
         #movies {
@@ -98,19 +98,6 @@
         max-width: 100%;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         box-sizing: border-box;
-
-
-#movieDetails .close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    color: #ff0000; /* Red color for the close button */
-    cursor: pointer;
-}
-
-#movieDetails .close:hover {
-    color: #cc0000; /* Darker red color on hover */
 }
         #movieDetails h3 {
             color: #333;
@@ -194,7 +181,6 @@
             </div>
 </div>
 
-<!-- Add a hidden input field to store the current movie ID -->
 <input type="hidden" id="currentMovieId">
 </section>
 
@@ -215,7 +201,7 @@
     var imageElement = document.getElementById('movieImage');
     var currentMovieIdElement = document.getElementById('currentMovieId');
 
-    currentMovieIdElement.value = movieId; // Store the current movie ID
+    currentMovieIdElement.value = movieId;
 
     fetch('/api/movie/' + movieId)
         .then(response => response.json())
@@ -245,7 +231,7 @@
         function searchMovies() {
     var searchInput = document.getElementById('search').value;
 
-    fetch('/search?query=' + searchInput)
+    fetch('/api/search?q=' + searchInput)
         .then(response => response.json())
         .then(data => {
             var moviesElement = document.getElementById('movies');
@@ -269,8 +255,7 @@
         .catch(error => console.error('Error fetching search results:', error));
 }
     function bookTicket() {
-            // Implement the ticket booking logic
-            // You may want to send the booking details to the server
+        var movieId = document.getElementById('currentMovieId').value;
             alert('Ticket booked successfully!');
         }
 
