@@ -24,6 +24,8 @@ class Movie(db.Model):
 
 @app.route('/admin/editMovie/<id>', methods=['GET', 'POST'])
 def edit_movie(id):
+    if 'admin_logged_in' not in session:
+        return redirect(url_for('admin_login'))
     movie = Movie.query.get(id)
     if request.method == 'POST':
         movie.Name = request.form.get('name')
@@ -39,6 +41,8 @@ def edit_movie(id):
 
 @app.route('/admin/api/delete/<id>', methods=['POST'])
 def delete_movie(id):
+    if 'admin_logged_in' not in session:
+        return redirect(url_for('admin_login'))
     movie = Movie.query.get(id)
     db.session.delete(movie)
     db.session.commit()
@@ -46,7 +50,9 @@ def delete_movie(id):
 
 @app.route('/admin/createMovie', methods=['GET', 'POST'])
 def create_movie():
-    if request.method == 'POST':
+    if 'admin_logged_in' not in session:
+        return redirect(url_for('admin_login'))
+    elif request.method == 'POST':
         new_id = str(int(Movie.query.order_by(Movie.Movie_ID.desc()).first().Movie_ID) + 1).zfill(4)
         new_movie = Movie(Movie_ID=new_id, Name=request.form.get('name'), Genre=request.form.get('genre'), Duration=request.form.get('duration'), Image=request.form.get('image'), Description=request.form.get('description'), Category=request.form.get('category'), Language=request.form.get('language'))
         db.session.add(new_movie)
@@ -76,7 +82,7 @@ def admin_login():
         return redirect(url_for('admin'))
     else:
         session['visited_some_page'] = True
-        return render_template('admin_login.html')
+        return render_template('login.html')
     
 @app.route('/')
 def index():
