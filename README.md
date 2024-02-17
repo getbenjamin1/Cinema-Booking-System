@@ -16,17 +16,21 @@ EXIT;
 You can connect to the `debianem` database and paste the content of `debianem.sql` if you wish but I do it as follows (works on linux...):
 `mysql -u bartsimpson -p debianem < debianem.sql`
 
-Once the Database is set up you need to sort the python dependencies
+Once the Database is set up you need to sort the Python dependencies.
 
 Linux:
-Run the following or `mysqlclient` will fail to install from pip.
-`sudo apt install python3-dev default-libmysqlclient-dev build-essential pkg-config`
-`python3 -m ensurepip`
-`pip install -r requirements.txt`
+Run the first line as well or `mysqlclient` will fail to install from pip.
+```
+sudo apt install python3-dev default-libmysqlclient-dev build-essential pkg-config
+python3 -m ensurepip
+pip install -r requirements.txt
+```
 
 Windows:
-`python3 -m ensurepip`
-`pip install -r requirements.txt`
+```
+python3 -m ensurepip
+pip install -r requirements.txt
+```
 
 Launch the server via `python3 server.py` and visit `localhost:5000` to see the webpage.
 Live instance available @ http://atuproject.tech/
