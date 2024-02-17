@@ -57,7 +57,7 @@ def create_movie():
         new_movie = Movie(Movie_ID=new_id, Name=request.form.get('name'), Genre=request.form.get('genre'), Duration=request.form.get('duration'), Image=request.form.get('image'), Description=request.form.get('description'), Category=request.form.get('category'), Language=request.form.get('language'))
         db.session.add(new_movie)
         db.session.commit()
-        return redirect(url_for('edit_movie', id=new_id))
+        return redirect(url_for('admin'))
     return render_template('create_movie.html')
 
 @app.route('/admin')
