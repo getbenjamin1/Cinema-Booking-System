@@ -1,153 +1,149 @@
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
+from flask import Flask, render_template, jsonify, request, redirect, url_for, flash, session
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import text
+from werkzeug.security import generate_password_hash, check_password_hash
+
+admin_pw = "homersimpson99"
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'bartlikesdarts'
+db_username, db_password, db_name = "bartsimpson", "duffdrinker", "debianem" 
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{db_username}:{db_password}@localhost/{db_name}'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+class Movie(db.Model):
+    __tablename__ = 'movie'
+    Movie_ID = db.Column(db.Integer, primary_key=True)
+    Name = db.Column(db.String(100), nullable=False)
+    Genre = db.Column(db.String(50))
+    Duration = db.Column(db.Integer)
+    Image = db.Column(db.String(100))
+    Description = db.Column(db.Text)
+    Category = db.Column(db.String(10))
+    Language = db.Column(db.String(20))
 
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+class Show(db.Model):
+    __tablename__ = 'show'
+    Show_ID = db.Column(db.String(10), primary_key=True)
+    Movie_ID = db.Column(db.String(5), db.ForeignKey('movie.Movie_ID'))
+    Date = db.Column(db.Date, nullable=False)
+    Screen_ID = db.Column(db.String(5), nullable=False)
+    Time = db.Column(db.Time, nullable=False)
+    Seats_Remaining = db.Column(db.Integer)
+    movie = db.relationship('Movie', backref='shows')
 
--- Database: `debianem`
 
-CREATE TABLE `booking` (
-  `Booking_ID` varchar(10) NOT NULL,
-  `No_of_Tickets` int(11) NOT NULL,
-  `Total_Cost` int(11) NOT NULL,
-  `Card_Number` varchar(19) DEFAULT NULL,
-  `Name_on_card` varchar(21) DEFAULT NULL,
-  `User_ID` varchar(5) DEFAULT NULL,
-  `Show_ID` int(10) DEFAULT NULL,
-  `Email_ID` varchar(30) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO `booking` (`Booking_ID`, `No_of_Tickets`, `Total_Cost`, `Card_Number`, `Name_on_card`, `User_ID`, `Show_ID`, `Email_ID`) VALUES
-('B001', 2, 20, '1234567890123456789', 'John Doe', 'U001', '1', 'john@example.com'),
-('B002', 3, 30, '9876543210987654321', 'Alice Smith', 'U002', '2', 'alice@example.com'),
-('B003', 1, 15, NULL, NULL, 'U003', '3', 'bob@example.com');
+@app.route('/admin/editShow/<id>', methods=['GET', 'POST'])
+def edit_show(id):
+    if 'admin_logged_in' not in session:
+        return redirect(url_for('admin_login'))
+    
+    show = Show.query.get(id)
 
-CREATE TABLE `movie` (
-  `Movie_ID` int(5) NOT NULL,
-  `Name` varchar(30) NOT NULL,
-  `Language` varchar(10) DEFAULT NULL,
-  `Genre` varchar(20) DEFAULT NULL,
-  `Category` varchar(25) DEFAULT NULL,
-  `Duration` varchar(10) DEFAULT NULL,
-  `Image` varchar(255) DEFAULT NULL,
-  `Description` text DEFAULT NULL CHECK (length(`Description`) <= 1000)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    if request.method == 'POST':
+        show.Movie_ID = request.form.get('movie_id')
+        show.Show_Time = request.form.get('time')
+        show.Seats_Remaining = request.form.get('seats_remaining')
+        show.Show_Date = request.form.get('show_date')  
+        show.Screen_ID = request.form.get('screen_id')
+        
+        # Optionally, you can also update other fields like Show_ID if needed
+        show.Show_ID = request.form.get('show_id')
 
-INSERT INTO `movie` (`Movie_ID`, `Name`, `Language`, `Genre`, `Category`, `Duration`, `Image`, `Description`) VALUES
-('1', 'Pacific Rim Uprising', 'English', 'Fantasy/SciFi', 'U/A', '1.33', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/qh3LRJG0ddJPe6Q7SqMJhBWxGHu.jpg', 'Jake Pentecost, son of Stacker Pentecost, reunites with Mako Mori to lead a new generation of Jaeger pilots, including rival Lambert and 15-year-old hacker Amara, against a new Kaiju threat.'),
-('2', 'Strangers : Prey at night', 'English', 'Horror', 'U/A', '2.20', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/vdxLpPsZkPZdFrREp7eSeSzcimj.jpg', 'A family of four staying at a secluded mobile home park for the night are stalked and then hunted by three masked psychopaths.'),
-('3', 'Tomb Raider', 'English', 'Fantasy/Action', 'A', '5.5', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/ePyN2nX9t8SOl70eRW47Q29zUFO.jpg', 'Lara Croft, the fiercely independent daughter of a missing adventurer, must push herself beyond her limits when she discovers the island where her father disappeared.'),
-('4', 'Midnight Sun', 'English', 'Romance', 'R', '1.3', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/vPG2zEKPXhovPW9S91SRnwr5JM1.jpg', 'A 17-year-old girl suffers from a condition that prevents her from being out in the sunlight.'),
-('5', 'Peter Rabbit', 'English', 'Fantasy/Adventure', 'U/A', '2', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/36MwBWUBwWa61ndbSXGqz7dHYqF.jpg', 'Feature adaptation of Beatrix Potter''s classic tale of a rebellious rabbit trying to sneak into a farmer''s vegetable garden.'),
-('6', 'Black Panther', 'English', 'Fantasy/SciFi', 'U/A', '2', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/uxzzxijgPIY7slzFvMotPv8wjKA.jpg', 'T''Challa, the King of Wakanda, rises to the throne in the isolated, technologically advanced African nation, but his claim is challenged by a vengeful outsider who was a childhood victim of T''Challa''s father''s mistake.'),
-('7', 'Maze Runner: The Death Cure', 'English', 'Fantasy/SciFi', 'U/A', '2','https://image.tmdb.org/t/p/w600_and_h900_bestv2/2zYfzA3TBwrMC8tfFbpiTLODde0.jpg', 'Young hero Thomas embarks on a mission to find a cure for a deadly disease known as the "Flare".'),
-('8', 'The Greatest Showman', 'English', 'Musical', 'U/A', '2', 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/b9CeobiihCx1uG1tpw8hXmpi7nm.jpg', 'Inspired by the imagination of P.T. Barnum, The Greatest Showman is an original musical that celebrates the birth of show business and tells of a visionary who rose from nothing to create a spectacle that became a worldwide sensation.');
+        db.session.commit()
+        return redirect(url_for('admin'))
 
-CREATE TABLE `screen` (
-  `Screen_ID` varchar(5) NOT NULL,
-  `No_of_Seats` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    return render_template('edit_show.html', show=show)
 
-INSERT INTO `screen` (`Screen_ID`, `No_of_Seats`) VALUES
-('S001', 100),
-('S002', 120),
-('S003', 80);
+@app.route('/admin/editMovie/<id>', methods=['GET', 'POST'])
+def edit_movie(id):
+    movie = Movie.query.get(id)
+    if request.method == 'POST':
+        movie.Name = request.form.get('name')
+        movie.Genre = request.form.get('genre')
+        movie.Duration = request.form.get('duration')
+        movie.Image = request.form.get('image')
+        movie.Description = request.form.get('description')
+        movie.Category = request.form.get('category')
+        movie.Language = request.form.get('language')
+        db.session.commit()
+        return redirect(url_for('admin'))
+    return render_template('edit_movie.html', movie=movie)
 
-CREATE TABLE `show` (
-  `Show_ID` int(10) NOT NULL,
-  `Show_Time` time NOT NULL,
-  `Show_Date` date NOT NULL,
-  `Seats_Remaining` int(11) NOT NULL CHECK (`Seats_Remaining` >= 0),
-  `Screen_ID` varchar(5) NOT NULL,
-  `Movie_ID` int(5) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+@app.route('/admin/api/delete/<id>', methods=['POST'])
+def delete_movie(id):
+    movie = Movie.query.get(id)
+    db.session.delete(movie)
+    db.session.commit()
+    return redirect(url_for('admin'))
 
-INSERT INTO `show` (`Show_ID`, `Show_Time`, `Show_Date`, `Seats_Remaining`, `Screen_ID`, `Movie_ID`) VALUES
-('1', '15:00:00', '2024-02-10', 100, 'S001', '001'),
-('2', '18:30:00', '2024-02-10', 120, 'S002', '002'),
-('3', '21:00:00', '2024-02-10', 80, 'S003', '003');
+@app.route('/admin/createMovie', methods=['GET', 'POST'])
+def create_movie():
+    if request.method == 'POST':
+        new_id = str(int(Movie.query.order_by(Movie.Movie_ID.desc()).first().Movie_ID) + 1).zfill(4)
+        new_movie = Movie(Movie_ID=new_id, Name=request.form.get('name'), Genre=request.form.get('genre'), Duration=request.form.get('duration'), Image=request.form.get('image'), Description=request.form.get('description'), Category=request.form.get('category'), Language=request.form.get('language'))
+        db.session.add(new_movie)
+        db.session.commit()
+        return redirect(url_for('edit_movie', id=new_id))
+    return render_template('create_movie.html')
 
-CREATE TABLE `ticket` (
-  `Ticket_ID` varchar(20) NOT NULL,
-  `Booking_ID` varchar(10) DEFAULT NULL,
-  `Screen_ID` varchar(5) NOT NULL,
-  `Price` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+@app.route('/admin')
+def admin():
+    if 'admin_logged_in' not in session:
+        return redirect(url_for('admin_login'))
+    movies = Movie.query.all()
+    return render_template('admin_splash.html', movies=movies)
 
-INSERT INTO `ticket` (`Ticket_ID`, `Booking_ID`, `Screen_ID`, `Price`) VALUES
-('T001', 'B001', 'S001', 10),
-('T002', 'B001', 'S001', 10),
-('T003', 'B002', 'S002', 10),
-('T004', 'B002', 'S002', 10),
-('T005', 'B002', 'S002', 10),
-('T006', 'B003', 'S003', 15);
+@app.route('/login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        admin = generate_password_hash(admin_pw)
+        if admin is not None and check_password_hash(admin, password):
+            session['admin_logged_in'] = True
+            return redirect(url_for('admin'))
+        else:
+            flash('Invalid username or password')
+    if 'admin_logged_in' in session and session['admin_logged_in']:
+        return redirect(url_for('admin'))
+    else:
+        session['visited_some_page'] = True
+        return render_template('admin_login.html')
+    
+@app.route('/')
+def index():
+    movies = Movie.query.limit(6).all()
+    return render_template('index.html', movies=movies)
 
-CREATE TABLE `ticket_type` (
-  `Type` varchar(5) NOT NULL,
-  `Cost` decimal(5,0) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+@app.route('/api/movie/<int:movie_id>')
+def get_movie_details(movie_id):
+    movie = Movie.query.get_or_404(movie_id)
+    return jsonify({
+        'Movie_ID': movie.Movie_ID,
+        'Name': movie.Name,
+        'Genre': movie.Genre,
+        'Duration': movie.Duration,
+        'Image': movie.Image,
+        'Description': movie.Description,
+        'Category': movie.Category,
+        'Language': movie.Language
+    })
 
-INSERT INTO `ticket_type` (`Type`, `Cost`) VALUES
-('Premi', 30),
-('Regul', 10),
-('VIP', 20);
+@app.route('/api/search', methods=['GET'])
+def search():
+    query = request.args.get('q', '')
+    results = Movie.query.filter(Movie.Name.ilike(f'%{query}%')).all()
+    return jsonify([{
+        'Movie_ID': movie.Movie_ID,
+        'Name': movie.Name,
+        'Genre': movie.Genre,
+        'Duration': movie.Duration,
+        'Image': movie.Image,
+    } for movie in results])
 
-CREATE TABLE `web_user` (
-  `Web_User_ID` varchar(5) NOT NULL,
-  `First_Name` varchar(15) DEFAULT NULL,
-  `Last_Name` varchar(20) DEFAULT NULL,
-  `Email_ID` varchar(30) DEFAULT NULL,
-  `Age` int(11) DEFAULT NULL,
-  `Phone_Number` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO `web_user` (`Web_User_ID`, `First_Name`, `Last_Name`, `Email_ID`, `Age`, `Phone_Number`) VALUES
-('U001', 'John', 'Doe', 'john@example.com', 30, '1234567890'),
-('U002', 'Alice', 'Smith', 'alice@example.com', 25, '9876543210'),
-('U003', 'Bob', 'Johnson', 'bob@example.com', 35, '4567890123');
-
-ALTER TABLE `booking`
-  ADD PRIMARY KEY (`Booking_ID`),
-  ADD KEY `User_ID` (`User_ID`),
-  ADD KEY `Show_ID` (`Show_ID`);
-
-ALTER TABLE `movie`
-  ADD PRIMARY KEY (`Movie_ID`);
-
-ALTER TABLE `screen`
-  ADD PRIMARY KEY (`Screen_ID`);
-
-ALTER TABLE `show`
-  ADD PRIMARY KEY (`Show_ID`),
-  ADD KEY `Screen_ID` (`Screen_ID`),
-  ADD KEY `Movie_ID` (`Movie_ID`);
-
-ALTER TABLE `ticket`
-  ADD PRIMARY KEY (`Ticket_ID`),
-  ADD KEY `Booking_ID` (`Booking_ID`);
-
-ALTER TABLE `ticket_type`
-  ADD PRIMARY KEY (`Type`);
-
-ALTER TABLE `web_user`
-  ADD PRIMARY KEY (`Web_User_ID`);
-
-ALTER TABLE `booking`
-  ADD CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`User_ID`) REFERENCES `web_user` (`Web_User_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`Show_ID`) REFERENCES `show` (`Show_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `show`
-  ADD CONSTRAINT `show_ibfk_1` FOREIGN KEY (`Screen_ID`) REFERENCES `screen` (`Screen_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `show_ibfk_2` FOREIGN KEY (`Movie_ID`) REFERENCES `movie` (`Movie_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `ticket`
-  ADD CONSTRAINT `ticket_ibfk_1` FOREIGN KEY (`Booking_ID`) REFERENCES `booking` (`Booking_ID`) ON DELETE CASCADE;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+if __name__ == '__main__':
+    app.run(host='', port=5000, debug=True)
