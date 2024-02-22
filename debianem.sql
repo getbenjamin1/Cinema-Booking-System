@@ -17,35 +17,35 @@ CREATE TABLE `booking` (
   `Card_Number` varchar(19) DEFAULT NULL,
   `Name_on_card` varchar(21) DEFAULT NULL,
   `User_ID` varchar(5) DEFAULT NULL,
-  `Show_ID` varchar(10) DEFAULT NULL,
+  `Show_ID` int(10) DEFAULT NULL,
   `Email_ID` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `booking` (`Booking_ID`, `No_of_Tickets`, `Total_Cost`, `Card_Number`, `Name_on_card`, `User_ID`, `Show_ID`, `Email_ID`) VALUES
-('B001', 2, 20, '1234567890123456789', 'John Doe', 'U001', 'SH001', 'john@example.com'),
-('B002', 3, 30, '9876543210987654321', 'Alice Smith', 'U002', 'SH002', 'alice@example.com'),
-('B003', 1, 15, NULL, NULL, 'U003', 'SH003', 'bob@example.com');
+('B001', 2, 20, '1234567890123456789', 'John Doe', 'U001', '1', 'john@example.com'),
+('B002', 3, 30, '9876543210987654321', 'Alice Smith', 'U002', '2', 'alice@example.com'),
+('B003', 1, 15, NULL, NULL, 'U003', '3', 'bob@example.com');
 
 CREATE TABLE `movie` (
-  `Movie_ID` varchar(5) NOT NULL,
+  `Movie_ID` int(5) NOT NULL,
   `Name` varchar(30) NOT NULL,
   `Language` varchar(10) DEFAULT NULL,
   `Genre` varchar(20) DEFAULT NULL,
-  `Category` varchar(5) DEFAULT NULL,
+  `Category` varchar(25) DEFAULT NULL,
   `Duration` varchar(10) DEFAULT NULL,
   `Image` varchar(255) DEFAULT NULL,
   `Description` text DEFAULT NULL CHECK (length(`Description`) <= 1000)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `movie` (`Movie_ID`, `Name`, `Language`, `Genre`, `Category`, `Duration`, `Image`, `Description`) VALUES
-('001', 'Pacific Rim Uprising', 'English', 'Fantasy/SciFi', 'U/A', '1.33', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/qh3LRJG0ddJPe6Q7SqMJhBWxGHu.jpg', 'Jake Pentecost, son of Stacker Pentecost, reunites with Mako Mori to lead a new generation of Jaeger pilots, including rival Lambert and 15-year-old hacker Amara, against a new Kaiju threat.'),
-('002', 'Strangers : Prey at night', 'English', 'Horror', 'U/A', '2.20', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/vdxLpPsZkPZdFrREp7eSeSzcimj.jpg', 'A family of four staying at a secluded mobile home park for the night are stalked and then hunted by three masked psychopaths.'),
-('003', 'Tomb Raider', 'English', 'Fantasy/Action', 'A', '5.5', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/ePyN2nX9t8SOl70eRW47Q29zUFO.jpg', 'Lara Croft, the fiercely independent daughter of a missing adventurer, must push herself beyond her limits when she discovers the island where her father disappeared.'),
-('004', 'Midnight Sun', 'English', 'Romance', 'R', '1.3', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/vPG2zEKPXhovPW9S91SRnwr5JM1.jpg', 'A 17-year-old girl suffers from a condition that prevents her from being out in the sunlight.'),
-('005', 'Peter Rabbit', 'English', 'Fantasy/Adventure', 'U/A', '2', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/36MwBWUBwWa61ndbSXGqz7dHYqF.jpg', 'Feature adaptation of Beatrix Potter''s classic tale of a rebellious rabbit trying to sneak into a farmer''s vegetable garden.'),
-('006', 'Black Panther', 'English', 'Fantasy/SciFi', 'U/A', '2', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/uxzzxijgPIY7slzFvMotPv8wjKA.jpg', 'T''Challa, the King of Wakanda, rises to the throne in the isolated, technologically advanced African nation, but his claim is challenged by a vengeful outsider who was a childhood victim of T''Challa''s father''s mistake.'),
-('007', 'Maze Runner: The Death Cure', 'English', 'Fantasy/SciFi', 'U/A', '2','https://image.tmdb.org/t/p/w600_and_h900_bestv2/2zYfzA3TBwrMC8tfFbpiTLODde0.jpg', 'Young hero Thomas embarks on a mission to find a cure for a deadly disease known as the "Flare".'),
-('008', 'The Greatest Showman', 'English', 'Musical', 'U/A', '2', 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/b9CeobiihCx1uG1tpw8hXmpi7nm.jpg', 'Inspired by the imagination of P.T. Barnum, The Greatest Showman is an original musical that celebrates the birth of show business and tells of a visionary who rose from nothing to create a spectacle that became a worldwide sensation.');
+('1', 'Pacific Rim Uprising', 'English', 'Fantasy/SciFi', 'U/A', '1.33', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/qh3LRJG0ddJPe6Q7SqMJhBWxGHu.jpg', 'Jake Pentecost, son of Stacker Pentecost, reunites with Mako Mori to lead a new generation of Jaeger pilots, including rival Lambert and 15-year-old hacker Amara, against a new Kaiju threat.'),
+('2', 'Strangers : Prey at night', 'English', 'Horror', 'U/A', '2.20', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/vdxLpPsZkPZdFrREp7eSeSzcimj.jpg', 'A family of four staying at a secluded mobile home park for the night are stalked and then hunted by three masked psychopaths.'),
+('3', 'Tomb Raider', 'English', 'Fantasy/Action', 'A', '5.5', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/ePyN2nX9t8SOl70eRW47Q29zUFO.jpg', 'Lara Croft, the fiercely independent daughter of a missing adventurer, must push herself beyond her limits when she discovers the island where her father disappeared.'),
+('4', 'Midnight Sun', 'English', 'Romance', 'R', '1.3', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/vPG2zEKPXhovPW9S91SRnwr5JM1.jpg', 'A 17-year-old girl suffers from a condition that prevents her from being out in the sunlight.'),
+('5', 'Peter Rabbit', 'English', 'Fantasy/Adventure', 'U/A', '2', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/36MwBWUBwWa61ndbSXGqz7dHYqF.jpg', 'Feature adaptation of Beatrix Potter''s classic tale of a rebellious rabbit trying to sneak into a farmer''s vegetable garden.'),
+('6', 'Black Panther', 'English', 'Fantasy/SciFi', 'U/A', '2', 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/uxzzxijgPIY7slzFvMotPv8wjKA.jpg', 'T''Challa, the King of Wakanda, rises to the throne in the isolated, technologically advanced African nation, but his claim is challenged by a vengeful outsider who was a childhood victim of T''Challa''s father''s mistake.'),
+('7', 'Maze Runner: The Death Cure', 'English', 'Fantasy/SciFi', 'U/A', '2','https://image.tmdb.org/t/p/w600_and_h900_bestv2/2zYfzA3TBwrMC8tfFbpiTLODde0.jpg', 'Young hero Thomas embarks on a mission to find a cure for a deadly disease known as the "Flare".'),
+('8', 'The Greatest Showman', 'English', 'Musical', 'U/A', '2', 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/b9CeobiihCx1uG1tpw8hXmpi7nm.jpg', 'Inspired by the imagination of P.T. Barnum, The Greatest Showman is an original musical that celebrates the birth of show business and tells of a visionary who rose from nothing to create a spectacle that became a worldwide sensation.');
 
 CREATE TABLE `screen` (
   `Screen_ID` varchar(5) NOT NULL,
@@ -58,18 +58,18 @@ INSERT INTO `screen` (`Screen_ID`, `No_of_Seats`) VALUES
 ('S003', 80);
 
 CREATE TABLE `show` (
-  `Show_ID` varchar(10) NOT NULL,
+  `Show_ID` int(10) NOT NULL,
   `Show_Time` time NOT NULL,
   `Show_Date` date NOT NULL,
   `Seats_Remaining` int(11) NOT NULL CHECK (`Seats_Remaining` >= 0),
   `Screen_ID` varchar(5) NOT NULL,
-  `Movie_ID` varchar(5) NOT NULL
+  `Movie_ID` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `show` (`Show_ID`, `Show_Time`, `Show_Date`, `Seats_Remaining`, `Screen_ID`, `Movie_ID`) VALUES
-('SH001', '15:00:00', '2024-02-10', 100, 'S001', '001'),
-('SH002', '18:30:00', '2024-02-10', 120, 'S002', '002'),
-('SH003', '21:00:00', '2024-02-10', 80, 'S003', '003');
+('1', '15:00:00', '2024-02-10', 100, 'S001', '001'),
+('2', '18:30:00', '2024-02-10', 120, 'S002', '002'),
+('3', '21:00:00', '2024-02-10', 80, 'S003', '003');
 
 CREATE TABLE `ticket` (
   `Ticket_ID` varchar(20) NOT NULL,
