@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
+from sqlalchemy.schema import CheckConstraint
 from werkzeug.security import generate_password_hash, check_password_hash
 
 admin_pw = "homersimpson99"
@@ -19,21 +20,18 @@ class Movie(db.Model):
     Duration = db.Column(db.Integer)
     Image = db.Column(db.String(100))
     Description = db.Column(db.Text)
-    Category = db.Column(db.String(10))
+    Category = db.Column(db.String(20))
     Language = db.Column(db.String(20))
-
 
 class Show(db.Model):
     __tablename__ = 'show'
-    Show_ID = db.Column(db.String(10), primary_key=True)
+    Show_ID = db.Column(db.Integer, primary_key=True)
     Movie_ID = db.Column(db.String(5), db.ForeignKey('movie.Movie_ID'))
-    Date = db.Column(db.Date, nullable=False)
+    Show_Date = db.Column(db.Date, nullable=False)
     Screen_ID = db.Column(db.String(5), nullable=False)
-    Time = db.Column(db.Time, nullable=False)
-    Seats_Remaining = db.Column(db.Integer)
+    Show_Time = db.Column(db.Time, nullable=False)
+    Seats_Remaining = db.Column(db.Integer, CheckConstraint('Seats_Remaining >= 0'))
     movie = db.relationship('Movie', backref='shows')
-
-
 
 @app.route('/admin/editShow/<id>', methods=['GET', 'POST'])
 def edit_show(id):
@@ -41,24 +39,23 @@ def edit_show(id):
         return redirect(url_for('admin_login'))
     
     show = Show.query.get(id)
+    movie = Movie.query.get(show.Movie_ID) 
 
     if request.method == 'POST':
         show.Movie_ID = request.form.get('movie_id')
         show.Show_Time = request.form.get('time')
         show.Seats_Remaining = request.form.get('seats_remaining')
-        show.Show_Date = request.form.get('show_date')  
+        show.Show_Date = request.form.get('show_date')
         show.Screen_ID = request.form.get('screen_id')
-        
-        # Optionally, you can also update other fields like Show_ID if needed
-        show.Show_ID = request.form.get('show_id')
-
         db.session.commit()
         return redirect(url_for('admin'))
 
-    return render_template('edit_show.html', show=show)
+    return render_template('edit_show.html', show=show, movie=movie)
 
 @app.route('/admin/editMovie/<id>', methods=['GET', 'POST'])
 def edit_movie(id):
+    if 'admin_logged_in' not in session:
+        return redirect(url_for('admin_login'))
     movie = Movie.query.get(id)
     if request.method == 'POST':
         movie.Name = request.form.get('name')
@@ -74,6 +71,8 @@ def edit_movie(id):
 
 @app.route('/admin/api/delete/<id>', methods=['POST'])
 def delete_movie(id):
+    if 'admin_logged_in' not in session:
+        return redirect(url_for('admin_login'))
     movie = Movie.query.get(id)
     db.session.delete(movie)
     db.session.commit()
@@ -81,20 +80,35 @@ def delete_movie(id):
 
 @app.route('/admin/createMovie', methods=['GET', 'POST'])
 def create_movie():
-    if request.method == 'POST':
-        new_id = str(int(Movie.query.order_by(Movie.Movie_ID.desc()).first().Movie_ID) + 1).zfill(4)
+    if 'admin_logged_in' not in session:
+        return redirect(url_for('admin_login'))
+    elif request.method == 'POST':
+        new_id = int(Movie.query.order_by(Movie.Movie_ID.desc()).first().Movie_ID) + 1
         new_movie = Movie(Movie_ID=new_id, Name=request.form.get('name'), Genre=request.form.get('genre'), Duration=request.form.get('duration'), Image=request.form.get('image'), Description=request.form.get('description'), Category=request.form.get('category'), Language=request.form.get('language'))
         db.session.add(new_movie)
         db.session.commit()
-        return redirect(url_for('edit_movie', id=new_id))
+        return redirect(url_for('admin'))
     return render_template('create_movie.html')
 
 @app.route('/admin')
 def admin():
     if 'admin_logged_in' not in session:
         return redirect(url_for('admin_login'))
+    return render_template('admin_splash.html')
+
+@app.route('/admin/movies')
+def admin_movies():
+    if 'admin_logged_in' not in session:
+        return redirect(url_for('admin_login'))
     movies = Movie.query.all()
-    return render_template('admin.html', movies=movies)
+    return render_template('admin_movies.html', movies=movies)
+
+@app.route('/admin/shows')
+def admin_shows():
+    if 'admin_logged_in' not in session:
+        return redirect(url_for('admin_login'))
+    shows = Show.query.all()
+    return render_template('admin_shows.html', shows=shows)
 
 @app.route('/login', methods=['GET', 'POST'])
 def admin_login():
@@ -111,7 +125,7 @@ def admin_login():
         return redirect(url_for('admin'))
     else:
         session['visited_some_page'] = True
-        return render_template('admin_login.html')
+        return render_template('login.html')
     
 @app.route('/')
 def index():
