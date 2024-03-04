@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Splash</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .box {
+            display: inline-block;
+            margin: 20px;
+            padding: 30px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+            text-decoration: none; /* Remove underline from links */
+            width: 200px;
+            height: 200px;
+        }
+
+        .box:hover {
+            transform: scale(1.05);
+        }
+
+        .box a {
+            display: block;
+            text-decoration: none;
+            color: black; /* Set the color for all links */
+            font-size: 2.5em; /* Increase font size */
+            text-align: center; /* Center the text within the box */
+        }
+
+        .box a:visited {
+            color: black; /* Set the color for visited links */
+        }
+
+        .box a:hover,
+        .box a:active {
+            color: black; /* Set the color for hover and active links */
+        }
+
+        /* Add border to Edit Movies */
+        .box:nth-child(1) {
+            border: 2px solid black;
+        }
+
+        /* Add border to Edit Shows */
+        .box:nth-child(2) {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/admin/movies" class="box" style="color: blue;">
+            <span style="font-size: 2.5em;">Edit Movies</span>
+        </a>
+        <a href="/admin/management" class="box" style="color: blue;">
+            <span style="font-size: 2.5em;">Screens&<br>Showings</span>
+        </a>
+        
+    </div>
+</body>
+</html>

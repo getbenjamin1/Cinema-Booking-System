@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+
+<!-- STYLE ME, ADD BOOK BUTTON. ADD BACK BUTTON-->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ movie.Name }} - Movie Details</title>
+</head>
+<body>
+    <h1>{{ movie.Name }}</h1>
+
+    <p><strong>Genre:</strong> {{ movie.Genre }}</p>
+    <p><strong>Duration:</strong> <span id="formattedDuration"></span></p>
+    <p><strong>Category:</strong> {{ movie.Category }}</p>
+    <p><strong>Language:</strong> {{ movie.Language }}</p>
+    <p><strong>Rating:</strong> {{ movie.Rating }}/10</p>
+
+    <img src="{{ movie.Image }}" alt="{{ movie.Name }} Poster" style="max-width: 300px;">
+
+    <p><strong>Description:</strong> {{ movie.Description }}</p>
+    <iframe width="1280" height="720" src="{{ movie.Trailer }}" frameborder="0" allowfullscreen></iframe>
+
+    <script>
+        function formatDuration(durationInHours) {
+            const hours = Math.floor(durationInHours);
+            const minutes = Math.round((durationInHours - hours) * 60);
+            return `${hours}h ${minutes}m`;
+        }
+
+        const movieDuration = "{{ movie.Duration }}";
+        const durationInHours = parseFloat(movieDuration);
+        const formattedDuration = formatDuration(durationInHours);
+        document.getElementById('formattedDuration').textContent = formattedDuration;
+    </script>
+</body>
+</html>
