@@ -250,6 +250,7 @@ def index():
     return render_template('index.html', screen_ids=screen_ids, shows=shows)
 
 
+
 @app.route('/api/movie/<int:movie_id>')
 def get_movie_details(movie_id):
     movie = Movie.query.get_or_404(movie_id)
