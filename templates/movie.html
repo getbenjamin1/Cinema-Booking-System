@@ -1,27 +1,173 @@
 <!DOCTYPE html>
-
-
-<!-- STYLE ME, ADD BOOK BUTTON. ADD BACK BUTTON-->
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ movie.Name }} - Movie Details</title>
+    <style>
+        body {
+            font-family: 'Klavia';
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background: linear-gradient(#3498db, #1abc9c); /*added background colour*/
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content horizontally */
+        }
+
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        header {
+            background-color: #152238;
+            color: #fff;
+            text-align: justify;
+            padding: 1em 0;
+            width: 100%; /* Ensure header spans the full width */
+            /*position: fixed; /* Fix header at the top */
+            top: 0; /* Align header to the top */
+            z-index: 1000; /* Set higher z-index to make sure it's above other content */
+        }
+        header img {
+            max-width: 100px;
+            margin-right: 10px;
+        }
+            
+        header h1 {
+            font-family: 'Klavia';
+            margin: 0;
+        }
+        #logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            background-color: #152238;
+            color: #fff;
+            text-align: center;
+            padding: 1em 0;
+            /*position: fixed; /* Fix footer at the bottom */
+            bottom: 0; /* Align footer to the bottom */
+            width: 100%; /* Ensure footer spans the full width */
+            z-index: 1000; /* Set higher z-index to make sure it's above other content */
+            font-family: 'Klavia';
+        }
+        footer a {
+            color: #fff; /* Set the text color to white */
+            text-decoration: none; /* Remove the default underline for links */
+        }
+
+        .content {
+            max-width: 800px;
+            margin-top: 50px; /* Adjust margin to accommodate fixed header */
+            margin-bottom: 50px; /* Adjust margin to accommodate fixed footer */
+            padding: 20px;
+            border: 1px solid #fff;
+            border-radius: 10px;
+            /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+            box-sizing: border-box;
+        } 
+
+        .movie-details {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 800px;
+            margin-top: 20px;
+        }
+
+        .movie-details img {
+            max-width: 250px;
+            margin-right: 20px;
+        }
+
+        .movie-info {
+            flex: 1; /* Take remaining space */
+        }
+
+        .movie-info p {
+            margin: 0 0 10px; /* Add some bottom margin for spacing */
+        }
+
+        .description-trailer {
+            display: flex;
+            justify-content: space-between; /* Space between description and trailer */
+            align-items: flex-start; /* Align items at the start (top) */
+            max-width: 800px;
+            margin-top: 20px;
+        }
+
+        .description {
+            flex: 1; /* Take remaining space */
+        }
+
+        .trailer {
+            flex: 1; /* Take remaining space */
+            margin-left: 20px; /* Add some left margin for spacing */
+        }
+
+        button {
+            background-color: #152238;
+            color: #fff;
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            margin-left: 15px;
+        }
+
+        button:hover {
+            background-color: #fff;
+            color: #152238;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>{{ movie.Name }}</h1>
+    <header>
+        <button class="button" onclick="window.history.back()">Back</button>
+        <div id = "logo-section">
+            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Debianem Cinema Logo">
+            <h1>Debianem Cinema</h1>
+        </div>
+    </header>
 
-    <p><strong>Genre:</strong> {{ movie.Genre }}</p>
-    <p><strong>Duration:</strong> <span id="formattedDuration"></span></p>
-    <p><strong>Category:</strong> {{ movie.Category }}</p>
-    <p><strong>Language:</strong> {{ movie.Language }}</p>
-    <p><strong>Rating:</strong> {{ movie.Rating }}/10</p>
+    <div class="content">
+        <h1>{{ movie.Name }}</h1>
 
-    <img src="{{ movie.Image }}" alt="{{ movie.Name }} Poster" style="max-width: 300px;">
+        <div class="movie-details">
+            <img src="{{ movie.Image }}" alt="{{ movie.Name }} Poster">
+            <div class="movie-info">
+                <p><strong>Genre:</strong> {{ movie.Genre }}</p>
+                <p><strong>Duration:</strong> <span id="formattedDuration"></span></p>
+                <p><strong>Category:</strong> {{ movie.Category }}</p>
+                <p><strong>Language:</strong> {{ movie.Language }}</p>
+                <p><strong>Rating:</strong> {{ movie.Rating }}/10</p>
+            </div>
+        </div>
 
-    <p><strong>Description:</strong> {{ movie.Description }}</p>
-    <iframe width="1280" height="720" src="{{ movie.Trailer }}" frameborder="0" allowfullscreen></iframe>
+        <div class="description-trailer">
+            <div class="description">
+                <p><strong>Description:</strong> {{ movie.Description }}</p>
+                <button class="button">Book Now</button>
+            </div>
+            <div class="trailer">
+                <iframe width="500" height="315" src="{{ movie.Trailer }}" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="{{ url_for('index') }}">&copy; 2024 Debianem Cinema</a>
+    </footer>
 
     <script>
         function formatDuration(durationInHours) {
@@ -35,5 +181,6 @@
         const formattedDuration = formatDuration(durationInHours);
         document.getElementById('formattedDuration').textContent = formattedDuration;
     </script>
+
 </body>
 </html>
