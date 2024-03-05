@@ -151,17 +151,21 @@
                 <p><strong>Category:</strong> {{ movie.Category }}</p>
                 <p><strong>Language:</strong> {{ movie.Language }}</p>
                 <p><strong>Rating:</strong> {{ movie.Rating }}/10</p>
+                <br>
+                <div class="trailer">
+                    <iframe width="450" height="215" src="{{ movie.Trailer }}" frameborder="0" allowfullscreen></iframe>
+                </div>
             </div>
         </div>
 
         <div class="description-trailer">
             <div class="description">
-                <p><strong>Description:</strong> {{ movie.Description }}</p>
+                <p><strong><h3>Description:</h3></strong> {{ movie.Description }}</p>
                 <button class="button">Book Now</button>
             </div>
-            <div class="trailer">
+          <!--  <div class="trailer">
                 <iframe width="500" height="315" src="{{ movie.Trailer }}" frameborder="0" allowfullscreen></iframe>
-            </div>
+            </div>-->
         </div>
     </div>
 
