@@ -271,12 +271,15 @@
 
         /* New styles for the contact form */
         .container {
-            display: grid;
+            display: flex;
+            flex-wrap: wrap;
             grid-template-columns: 1fr 1fr;
-            justify-content: center;
-            align-items: center;
+            justify-content: space-between;
+            align-items: baseline;
             flex-grow: 0; /* Occupy remaining vertical space */
             padding: 20px;
+            max-width: 800px; /* Adjusted max-width */
+            margin: 20px 30px auto 150px; /* Center the container */
         }
         .container1 {
             display:flex;
@@ -286,7 +289,17 @@
             padding: 20px;
         }
         .card {
-            width: 100%;
+            width: 40%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            
+        }
+        .card1 {
+            width: 40%;
             max-width: 600px;
             background-color: #fff;
             border-radius: 10px;
@@ -296,7 +309,6 @@
             
         }
 
-
         .card-title {
             font-size: 24px;
             color: #333;
@@ -305,7 +317,6 @@
 
         .card-content p {
             color: #555;
-            height: 390px;
         }
 
         input[type="text"],
@@ -352,7 +363,7 @@
 
 
  <div class="container">
-    <div class="card">
+    <div class="card1">
         <div class="card-content"> 
             <h3 class="card-title">Contact Us</h3>
             <p>
