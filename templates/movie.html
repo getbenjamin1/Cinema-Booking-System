@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <title>{{ movie.Name }} - Movie Details</title>
     <style>
         body {
@@ -23,16 +24,28 @@
             display: table;
             clear: both;
         }
-        header {
+
+      /*  header {
             background-color: #152238;
             color: #fff;
             text-align: justify;
             padding: 1em 0;
             width: 100%; /* Ensure header spans the full width */
             /*position: fixed; /* Fix header at the top */
-            top: 0; /* Align header to the top */
-            z-index: 1000; /* Set higher z-index to make sure it's above other content */
+            /*top: 0; /* Align header to the top */
+            /*z-index: 1000; /* Set higher z-index to make sure it's above other content */
+        /*}*/
+
+        header {
+            background-color: #152238;
+            color: #fff;
+            padding: 1em 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
+
         header img {
             max-width: 100px;
             margin-right: 10px;
@@ -46,7 +59,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
+            /*margin-bottom: 20px;*/
+            flex-grow: 1; /* Ensures it takes up the maximum available space */
+            text-align: center;
         }
 
         footer {
@@ -73,6 +88,10 @@
             border: 1px solid #fff;
             border-radius: 10px;
             /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+            /*background-color: #152238;
+            color: #fff;*/
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #152238;
             box-sizing: border-box;
         } 
 
@@ -114,6 +133,11 @@
             margin-left: 20px; /* Add some left margin for spacing */
         }
 
+        .button {
+            margin-left: 1em; /* Adjust as necessary for spacing from the left edge */
+            margin-right: auto; /* Pushes everything else to the right */
+        }
+        
         button {
             background-color: #152238;
             color: #fff;
@@ -121,12 +145,14 @@
             cursor: pointer;
             border: 1px solid #fff;
             border-radius: 5px;
-            margin-left: 15px;
+            /*margin-left: 15px;*/
         }
 
         button:hover {
             background-color: #fff;
             color: #152238;
+            transform: scale(1.05);
+            transition: transform 0.5s;
         }
     </style>
 </head>
