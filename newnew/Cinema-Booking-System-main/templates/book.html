@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Show</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        .show-container {
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .show {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .show h2 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .show p {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .booking-form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 15px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .booking-form label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .booking-form input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .booking-form button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Book Show</h1>
+
+    <div class="show-container">
+        {% if shows %}
+            {% for show in shows %}
+                <div class="show">
+                    <h2>{{ movie.Name }} - Show {{ show.Show_ID }}</h2>
+                    <p>Date: {{ show.Show_Date }}, Time: {{ show.Show_Time }}</p>
+                    <p>Screen ID: {{ show.Screen_ID }}, Seats Remaining: {{ show.Seats_Remaining }}</p>
+                    <button onclick="selectShow('{{ show.Show_ID }}')">Select Show</button>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-shows">No shows available.</p>
+        {% endif %}
+    </div>
+
+    <div class="booking-form" id="bookingForm" style="display: none;">
+        <label for="No_of_Tickets">Number of Tickets:</label>
+        <input type="number" id="No_of_Tickets" value="1">
+
+        <label for="Name_on_card">Name on Card:</label>
+        <input type="text" id="Name_on_card" placeholder="John Doe">
+
+        <label for="Card_Number">Card Number:</label>
+        <input type="text" id="Card_Number" placeholder="Card Number">
+
+        <label for="Expiration_Date">Expiration Date (MM/YY):</label>
+        <input type="text" id="Expiration_Date" placeholder="MM/YY">
+
+        <label for="CVV">CVV:</label>
+        <input type="text" id="CVV" placeholder="CVV">
+
+        <button onclick="submitBooking()">Book Now</button>
+        <input type="hidden" id="Show_ID" name="Show_ID">
+    </div>
+
+    <script>
+    var currentURL = window.location.href;
+
+    var match = currentURL.match(/\/book\/(\d+)/);
+
+    if (match) {
+        Show_ID = parseInt(match[1], 10);
+        console.log("show_ID:", Show_ID);
+    } else {
+        console.log("Show_ID not found in the URL");
+    }
+    var ticket_id;
+        function selectShow(showID) {
+        var showContainers = document.getElementsByClassName('show');
+        for (var i = 0; i < showContainers.length; i++) {
+            showContainers[i].style.display = 'none';
+        }
+
+        document.getElementById('bookingForm').style.display = 'block';
+    }
+        
+        function submitBooking() {
+            var No_of_Tickets = document.getElementById('No_of_Tickets').value;
+            var Name_on_card = document.getElementById('Name_on_card').value;
+            var Card_Number = document.getElementById('Card_Number').value;
+
+            var bookingData = {
+                No_of_Tickets: No_of_Tickets,
+                Name_on_card: Name_on_card,
+                Card_Number: Card_Number,
+                Show_ID: Show_ID
+            };
+
+            fetch('/bookShow', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(bookingData)
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    return response.text();
+                } else {
+                    throw new Error('Failed to submit booking');
+                }
+            })
+            .then(bookingID => {
+                ticket_id = bookingID;
+                chargeCard();
+            })
+            .catch(error => {
+                console.error('Error submitting booking:', error);
+            });
+        }
+
+
+        function chargeCard() {
+            var Expiration_Date = document.getElementById('Expiration_Date').value;
+            var CVV = document.getElementById('CVV').value;
+            var Card_Number = document.getElementById('Card_Number').value;
+            showTicket();
+
+        }
+
+        function showTicket() {
+    var ticketID = ticket_id;
+    var tIDb64 = btoa(ticketID);
+
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/viewTicket';
+
+    
+    var hiddenInput = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = 'ticket_id_b64';
+    hiddenInput.value = tIDb64;
+
+
+    form.appendChild(hiddenInput);
+    document.body.appendChild(form);
+    form.submit();
+}
+    </script>
+</body>
+</html>
