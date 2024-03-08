@@ -217,7 +217,7 @@
         }
         .tab.active {
             background-color: #fff; /* Background color for active tab */
-            color: #000000; /* Text color for active tab */
+            color: #152238; /* Text color for active tab */
         }
         .tab:hover {
             background-color: #fff;
@@ -226,6 +226,20 @@
         .tab.active:hover {
             background-color: #152238;
             color: #fff;
+        }
+
+               #subtab-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        /* Adjust the translateX values based on the number of tabs/content sections you have */
+        #now-showing {
+            transform: translateX(0%);
+        }
+
+        #all-movies {
+            transform: translateX(100%);
         }
     </style>
 </head>
@@ -249,23 +263,44 @@
             <a href="/watchanddine" class="tab">Watch & Dine</a>
             <a href="/contact" class="tab">Contact</a>
         </div>
-    </header>
 
-<section>
-  <div id="now-showing-section" class="movie-section">
-    <h2>Now Showing</h2>
-    <div id="movies">
-    {% for screen_id in screen_ids %}
-            {% for show in shows[screen_id] %}
-                <div class="movie" onclick="showMovieDetails({{ show.Movie_ID }})">
-                    <img src="{{ show.movie.Image }}" alt="{{ show.movie.Name }}">
-                    <p>{{ show.movie.Name }}<br> <b>Screen {{ screen_id }}</b></p>
-                </div>
-            {% endfor %}
-    {% endfor %}
+    </header>
+    
+    <!-- Tabs container -->
+    <div id="subtab-container">
+        <div class="tab active" onclick="showNowShowing()">Now Showing</div>
+        <div class="tab" onclick="showAllMovies()">All Movies</div>
     </div>
 
-    <div id="movieDetails" class="modal">
+    <section>
+        <div id="now-showing-section" class="movie-section">
+          <h2>Now Showing</h2>
+          <div id="movies">
+          {% for screen_id in screen_ids %}
+                  {% for show in shows[screen_id] %}
+                      <div class="movie" onclick="showMovieDetails({{ show.Movie_ID }})">
+                          <img src="{{ show.movie.Image }}" alt="{{ show.movie.Name }}">
+                          <p>{{ show.movie.Name }}<br> <b>Screen {{ screen_id }}</b></p>
+                      </div>
+                  {% endfor %}
+            {% endfor %}
+         </div>
+    </div>
+      
+          <div id="all-movies-section" class="movie-section" style="display: none;">
+              <!-- All Movies content will be dynamically populated here -->
+              <h2>Movies Available</h2>
+              <div id="movies" class="all-movies-grid">
+                  {% for movie in movies %}
+                  <div class="movie" onclick="showMovieDetails({{ movie.Movie_ID }})">
+                      <img src="{{ movie.Image }}" alt="{{ movie.Name }}">
+                      <p>{{ movie.Name }}</p>
+                  </div>
+                  {% endfor %}
+              </div>
+          </div>
+
+        <div id="movieDetails" class="modal">
         <div class="modal-content">
                 <span class="close" onclick="closeModal()">&times;</span>
                 <h3>Movie Details</h3>
@@ -292,6 +327,20 @@
                 displayMovies(data, 'now-showing-section');
             })
             .catch(error => console.error('Error fetching now showing movies:', error));
+    }
+
+    // Function to show the "All Movies" section and hide the "Now Showing" movies section
+    function showAllMovies() {
+        document.getElementById('now-showing-section').style.display = 'none';
+        document.getElementById('all-movies-section').style.display = 'block';
+        document.querySelector('.tab.active').classList.remove('active');
+        document.querySelector('.tab:nth-child(2)').classList.add('active');
+        fetch('/api/all-movies')
+            .then(response => response.json())
+            .then(data => {
+                displayMovies(data, 'all-movies-section');
+            })
+            .catch(error => console.error('Error fetching all movies:', error));
     }
 
 // Function to display movies in the specified section
