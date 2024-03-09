@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinema Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background: linear-gradient(#3498db, #1abc9c); /*added background colour*/
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+            }
+
+        header {
+            background-color: #152238;
+            color: #fff;
+            text-align: center;
+            padding: 1em 0;
+            position: relative;
+        }
+        header img {
+            max-width: 100px;
+            margin-right: 10px;
+        }
+            
+            
+        header h1 {
+            font-family: 'Chizel';
+            margin: 0;
+        }
+        #logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+
+        #search-bar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            color: #fff;
+            height: 50px;
+            padding: 10px;
+            background-color: #152238;
+        }
+        #search-bar label {
+            color: #fff;
+            font-weight: normal;
+            font-family: 'Klavia';
+        }
+        #search-bar input {
+            height: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        #search-results {
+            margin-top: 60px;
+        }
+
+        .about-button {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+        }
+        .about-button:hover {
+            background-color: #fff;
+            color: #152238;
+        }
+
+        section {
+        display: flex;
+        flex-direction: column;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        /*padding-top: 80px;*/
+        width: 100%;
+        box-sizing: border-box;
+        }
+
+        #movies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .movie {
+            width: calc(33.33% - 20px);
+            cursor: pointer;
+            border: 1px solid #ccc;
+            padding: 10px;
+            transition: transform 0.3s;
+            box-sizing: border-box;
+            text-align: center;
+            font-weight: 300;
+        }
+        .movie-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+/* Adjust the width for each movie in the last row */
+        #movies:last-child .movie {
+             width: calc(33.33% - 20px);
+        }
+
+        
+        .movie:hover {
+            transform: scale(1.05);
+            font-weight: 600;
+        }
+
+        .movie img {
+            width: 100%;
+            height: auto;
+        }
+
+        #movieDetails {
+            background: linear-gradient(/*to right,*/ #3498db, #1abc9c);
+            display: none;
+            margin-top: 20px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            /*background-color: #fefefe; */
+            padding: 20px;
+            border: 1px solid #888;
+            max-width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            font-family: 'Klavia';
+        }
+
+        #movieDetails h3 {
+            color: #333;
+        }
+
+        #movieDetails img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        #booking {
+            margin-top: 40px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        input {
+            padding: 8px;
+            margin-bottom: 16px;
+        }
+
+        button {
+            background-color: #152238;
+            color: #fff;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        footer {
+            background-color: #152238;
+            color: #fff;
+            text-align: center;
+            padding: 1em 0;
+            position: relative;
+            clear: both;
+            font-family: 'Klavia';
+            margin-top: auto;
+        }
+        footer a {
+            color: #fff; /* Set the text color to white */
+            text-decoration: none; /* Remove the default underline for links */
+        }
+
+        h2 {
+            color: #152238;
+            width: 100%;
+        }
+        .home-button {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+        }
+        .home-button:hover {
+            background-color: #fff;
+            color: #152238;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 20px;
+            background-color: #152238;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Klavia';
+            font-size: 16px;
+            margin-right: 20px;
+        }
+        /* Styles for the tab container and tabs */
+        #tab-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .tab {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+        }
+        .tab.active {
+            background-color: #fff; /* Background color for active tab */
+            color: #000000; /* Text color for active tab */
+        }
+        .tab:hover {
+            background-color: #fff;
+            color: #152238;
+        }
+        .tab.active:hover {
+            background-color: #152238;
+            color: #fff;
+        }
+        .main-content {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id="logo-section">
+            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Debianem Cinema Logo">
+            <h1>Debianem Cinema</h1>
+        </div>
+        <nav>
+            <div id="tab-container">
+                <a href="/" class="tab">Home</a>
+                <a href="/about" class="tab">About Us</a>
+                <a href="/watchanddine" class="tab active">Watch & Dine</a>
+                <a href="/contact" class="tab">Contact</a>
+            </div>
+        </nav>
+    </header>
+    <!-- Content for watch and dine experience -->
+    <div class="main-content">
+        <h1>Welcome to Watch & Dine Experience</h1>
+        <p>Indulge in a unique cinematic experience that goes beyond the screen. Our Watch & Dine service combines the best of entertainment and culinary delights. Sit back, relax, and savor the fusion of great movies and delicious dining options.</p>
+    
+        <h2>What to Expect:</h2>
+        <ul>
+            <li><strong>Exclusive Movie Selection:</strong> Enjoy a curated selection of the latest blockbusters and timeless classics.</li>
+            <li><strong>Comfortable Seating:</strong> Relax in our cozy, specially designed seating areas with the perfect view of the big screen.</li>
+            <li><strong>Delicious Dining Options:</strong> Choose from a diverse menu featuring gourmet dishes, snacks, and refreshing beverages.</li>
+            <li><strong>Personalized Service:</strong> Our attentive staff is dedicated to making your experience memorable. Place your orders with ease and enjoy seamless service throughout the show.</li>
+            <li><strong>Special Events:</strong> Join us for themed movie nights, culinary events, and more. Stay tuned for our upcoming schedule.</li>
+        </ul>
+    
+        <h2>Book Your Watch & Dine Experience:</h2>
+        <p>Ready to elevate your movie night? Book your Watch & Dine experience now and treat yourself to a unique blend of entertainment and dining, <b><i>By calling 08012344567</b></i></p>
+    
+    </div>
+    
+</body>
+<footer>
+    <a href="index.html">&copy; 2024 Debianem Cinema</a>
+</footer>
+</html>

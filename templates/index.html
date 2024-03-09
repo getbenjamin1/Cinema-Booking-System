@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinema Booking</title>
+    <style>
+        body {
+            font-family: 'Klavia';
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background: linear-gradient(#3498db, #1abc9c); /*added background colour*/
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+            }
+
+        header {
+            background-color: #152238;
+            color: #fff;
+            text-align: center;
+            padding: 1em 0;
+            position: relative;
+        }
+        header img {
+            max-width: 100px;
+            margin-right: 10px;
+        }
+            
+            
+        header h1 {
+            font-family: 'Klavia';
+            margin: 0;
+        }
+        #logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+
+        #search-bar {
+            position: absolute;
+            top:0;
+            right: 0;
+            color: #fff;
+            height: 50px;
+            padding: 10px;
+            background-color: #152238;
+        }
+        #search-bar label {
+            color: #fff;
+            font-weight: normal;
+            font-family: 'Klavia';
+        }
+        #search-bar input {
+            height: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        #search-results {
+            margin-top: 60px;
+        }
+
+        section {
+        display: flex;
+        flex-direction: column;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        /* padding-top: 80px; */
+        width: 100%;
+        box-sizing: border-box;
+        }
+
+        #movies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        h2 {
+            color: #152238;
+        }
+
+        .movie {
+            width: calc(33.33% - 20px);
+            cursor: pointer;
+            border: 1px solid #ccc;
+            padding: 10px;
+            transition: transform 0.3s;
+            box-sizing: border-box;
+            text-align: center;
+            font-weight: 300;
+        }
+        .movie-row {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+        
+/* Adjust the width for each movie in the last row */
+        #movies:last-child .movie {
+             width: calc(33.33% - 20px);
+        }
+
+        
+        .movie:hover {
+            transform: scale(1.05);
+            font-weight: 600;
+        }
+
+        .movie img {
+            width: 100%;
+            height: auto;
+        }
+
+        #movieDetails {
+            background: linear-gradient(/*to right,*/ #3498db, #1abc9c);
+            display: none;
+            margin-top: 20px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            /*background-color: #fefefe; */
+            padding: 20px;
+            border: 1px solid #888;
+            max-width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            font-family: 'Klavia';
+        }
+
+        #movieDetails h3 {
+            color: #333;
+        }
+
+        #movieDetails img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        #booking {
+            margin-top: 40px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        input {
+            padding: 8px;
+            margin-bottom: 16px;
+        }
+
+        button {
+            background-color: #152238;
+            color: #fff;
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid #fff;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #fff;
+            color: #152238;
+        }
+
+        footer {
+            background-color: #152238;
+            color: #fff;
+            text-align: center;
+            padding: 1em 0;
+            position: relative;
+            clear: both;
+            font-family: 'Klavia';
+            margin-top: auto;
+        }
+        footer a {
+            color: #fff; /* Set the text color to white */
+            text-decoration: none; /* Remove the default underline for links */
+        }
+
+        /* Styles for the tab container and tabs */
+        #tab-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .tab {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+        }
+        .tab.active {
+            background-color: #fff; /* Background color for active tab */
+            color: #152238; /* Text color for active tab */
+        }
+        .tab:hover {
+            background-color: #fff;
+            color: #152238;
+        }
+        .tab.active:hover {
+            background-color: #152238;
+            color: #fff;
+        }
+
+               #subtab-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        /* Adjust the translateX values based on the number of tabs/content sections you have */
+        #now-showing {
+            transform: translateX(0%);
+        }
+
+        #all-movies {
+            transform: translateX(100%);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div id = "logo-section">
+            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Debianem Cinema Logo">
+            <h1>Debianem Cinema</h1>
+        </div>
+        <div id="search-bar">
+            <label for="search">Search:</label>
+            <input type="text" id="search" placeholder="Enter keywords">
+            <button onclick="searchMovies()">Search</button>
+            <div id="search-results"></div>
+        </div>
+        <!-- new tabs -->
+        <div id="tab-container">
+            <a href="/" class="tab active">Home</a>
+            <a href="/about" class="tab">About Us</a>
+            <a href="/watchanddine" class="tab">Watch & Dine</a>
+            <a href="/contact" class="tab">Contact</a>
+        </div>
+
+    </header>
+    
+    <!-- Tabs container -->
+    <div id="subtab-container">
+        <div class="tab active" onclick="showNowShowing()">Now Showing</div>
+        <div class="tab" onclick="showAllMovies()">All Movies</div>
+    </div>
+
+    <section>
+        <div id="now-showing-section" class="movie-section">
+          <h2>Now Showing</h2>
+          <div id="movies">
+          {% for screen_id in screen_ids %}
+                  {% for show in shows[screen_id] %}
+                      <div class="movie" onclick="showMovieDetails({{ show.Movie_ID }})">
+                          <img src="{{ show.movie.Image }}" alt="{{ show.movie.Name }}">
+                          <p>{{ show.movie.Name }}<br> <b>Screen {{ screen_id }}</b></p>
+                      </div>
+                  {% endfor %}
+            {% endfor %}
+         </div>
+    </div>
+      
+          <div id="all-movies-section" class="movie-section" style="display: none;">
+              <!-- All Movies content will be dynamically populated here -->
+              <h2>Movies Available</h2>
+              <div id="movies" class="all-movies-grid">
+                  {% for movie in movies %}
+                  <div class="movie" onclick="showMovieDetails({{ movie.Movie_ID }})">
+                      <img src="{{ movie.Image }}" alt="{{ movie.Name }}">
+                      <p>{{ movie.Name }}</p>
+                  </div>
+                  {% endfor %}
+              </div>
+          </div>
+
+        <div id="movieDetails" class="modal">
+        <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h3>Movie Details</h3>
+                <img id="movieImage" src="" alt="">
+                <p id="movieDescription"></p>
+                <button onclick="bookTicket()">Book Ticket</button>
+        </div>
+    </div>
+
+<input type="hidden" id="currentMovieId">
+</section>
+
+<script>
+    //<!-- new lines of code added -->
+    // Function to show the "Now Showing" movies section and hide the "All Movies" section
+    function showNowShowing() {
+        document.getElementById('now-showing-section').style.display = 'block';
+        document.getElementById('all-movies-section').style.display = 'none';
+        document.querySelector('.tab.active').classList.remove('active');
+        document.querySelector('.tab:nth-child(1)').classList.add('active');
+        fetch('/api/now-showing')
+            .then(response => response.json())
+            .then(data => {
+                displayMovies(data, 'now-showing-section');
+            })
+            .catch(error => console.error('Error fetching now showing movies:', error));
+    }
+
+    // Function to show the "All Movies" section and hide the "Now Showing" movies section
+    function showAllMovies() {
+        document.getElementById('now-showing-section').style.display = 'none';
+        document.getElementById('all-movies-section').style.display = 'block';
+        document.querySelector('.tab.active').classList.remove('active');
+        document.querySelector('.tab:nth-child(2)').classList.add('active');
+        fetch('/api/all-movies')
+            .then(response => response.json())
+            .then(data => {
+                displayMovies(data, 'all-movies-section');
+            })
+            .catch(error => console.error('Error fetching all movies:', error));
+    }
+
+// Function to display movies in the specified section
+function displayMovies(movies, sectionId) {
+    var moviesContainer = document.getElementById(sectionId);
+    moviesContainer.innerHTML = '';
+
+    // Counter to track movies
+    var counter = 1;
+
+    // Loop through each movie
+    movies.forEach(movie => {
+        // If counter is 1, start a new row
+        if (counter === 1) {
+            var row = document.createElement('div');
+            row.classList.add('movie-row');
+            moviesContainer.appendChild(row);
+        }
+
+        var movieElement = document.createElement('div');
+        movieElement.classList.add('movie');
+        movieElement.onclick = function () {
+            showMovieDetails(movie.Movie_ID);
+        };
+
+        movieElement.innerHTML = `
+            <img src="${movie.Image}" alt="${movie.Name}">
+            <p>${movie.Name}</p>
+        `;
+
+        // Append the movie to the current row
+        var currentRow = moviesContainer.lastElementChild;
+        currentRow.appendChild(movieElement);
+
+        // Increment counter
+        counter++;
+
+        // If counter reaches 4, reset it to 1 (start a new row)
+        if (counter === 4) {
+            counter = 1;
+        }
+    });
+}
+
+    // new codes finidhed same as old
+    function closeModal() {
+        var modalElement = document.getElementById('movieDetails');
+        var imageElement = document.getElementById('movieImage');
+
+        modalElement.style.display = 'none';
+        modalElement.style.fontSize = '';
+        imageElement.style.width = ''; 
+        imageElement.style.height = '';
+    }
+
+    function showMovieDetails(movieID) {
+        window.location = '/movies/' + movieID;
+    }
+
+    // Add an event listener to the search input
+    document.getElementById('search').addEventListener('input', function() {
+        var searchInput = this.value.trim(); // Trim whitespace
+
+        // Check if search input is empty
+        if (searchInput === '') {
+            // Reload the page
+            window.location.reload();
+            return; // Stop execution
+        }
+    });
+
+    function searchMovies() {
+        var searchInput = document.getElementById('search').value.trim(); // Trim whitespace
+
+        fetch('/api/search?q=' + searchInput)
+            .then(response => response.json())
+            .then(data => {
+                displaySearchMovies(data, 'now-showing-section');
+            })
+            .catch(error => console.error('Error fetching search results:', error));
+    }
+
+// Function to display movies in the specified section
+function displaySearchMovies(movies, sectionId) {
+    var moviesContainer = document.getElementById(sectionId);
+    moviesContainer.innerHTML = '';
+
+    // Counter to track movies
+    var counter = 0;
+    var row;
+
+    movies.forEach(movie => {
+        // If counter is 0, start a new row
+        if (counter === 0) {
+            row = document.createElement('div');
+            row.classList.add('movie-row');
+            moviesContainer.appendChild(row);
+        }
+
+        var movieElement = document.createElement('div');
+        movieElement.classList.add('movie');
+        movieElement.onclick = function () {
+            showMovieDetails(movie.Movie_ID);
+        };
+
+        movieElement.innerHTML = `
+            <img src="${movie.Image}" alt="${movie.Name}">
+            <p>${movie.Name}</p>
+        `;
+
+        // Append the movie to the current row
+        row.appendChild(movieElement);
+
+        // Increment counter
+        counter++;
+
+        // If counter reaches 3, reset it to 0 (start a new row)
+        if (counter === 3) {
+            counter = 0;
+        }
+    });
+}
+
+
+    function bookTicket() {
+        var movieId = document.getElementById('currentMovieId').value;
+            alert('Ticket booked successfully!');
+        }
+
+    </script>
+
+    <footer>
+        <a href="{{ url_for('index') }}">&copy; 2024 Debianem Cinema</a>
+    </footer>
+
+</body>
+
+</html>
