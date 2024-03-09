@@ -7,7 +7,8 @@
     <title>Cinema Booking</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            /* font-family: Arial, sans-serif; */
+            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
@@ -347,10 +348,12 @@
 <body>
 <header>
 
-<div id="logo-section">
-    <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Debianem Cinema Logo">
-<h1>Debianem Cinema</h1>
-</div>
+    <div id="logo-section">
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Debianem Cinema Logo">
+        </a>
+        <h1>Debianem Cinema</h1>
+    </div>
 <nav>
     <div id="tab-container">
         <a href="/" class="tab">Home</a>

@@ -93,6 +93,7 @@
             /* background-color: rgba(255, 255, 255, 0.8);
             color: #152238; */
             box-sizing: border-box;
+            
         } 
 
         .movie-details {
@@ -101,6 +102,8 @@
             justify-content: center;
             max-width: 800px;
             margin-top: 20px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
         }
 
         .movie-details img {
@@ -126,6 +129,8 @@
 
         .description {
             flex: 1; /* Take remaining space */
+            font-family: 'Inter', sans-serif;
+            font-weight: 200;
         }
 
         .trailer {
@@ -160,8 +165,10 @@
 <body>
     <header>
         <button class="button" onclick="window.history.back()">Back</button>
-        <div id = "logo-section">
-            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Debianem Cinema Logo">
+        <div id="logo-section">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Debianem Cinema Logo">
+            </a>
             <h1>Debianem Cinema</h1>
         </div>
     </header>

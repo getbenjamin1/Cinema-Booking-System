@@ -17,6 +17,23 @@
             display: flex;
             flex-direction: column;
         }
+        .background-image-container {
+    background-image: url('static/watch+dine.jpg'); /* Replace with your image path */
+    background-size: cover; /* Cover ensures the image covers the whole area */
+    background-position: center center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    height: 400px; /* Set the height you desire */
+    position: relative; /* For positioning the text over the image */
+}
+.footer-image-container {
+    background-image: url('static/watch+dine3.jpg'); /* Replace with your image path */
+    background-size: cover; /* Cover ensures the image covers the whole area */
+    background-position: center center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    height: 400px; /* Set the height you desire */
+    position: relative; 
+}
+
         .clearfix::after {
             content: "";
             display: table;
@@ -90,9 +107,9 @@
         max-width: 800px;
         margin: 0 auto;
         padding: 20px;
-        /*padding-top: 80px;*/
         width: 100%;
         box-sizing: border-box;
+        
         }
 
         #movies {
@@ -206,10 +223,7 @@
             text-decoration: none; /* Remove the default underline for links */
         }
 
-        h2 {
-            color: #152238;
-            width: 100%;
-        }
+      
         .home-button {
             color: #fff;
             text-decoration: none;
@@ -266,13 +280,31 @@
         }
         .main-content {
             padding: 20px;
+            font-family: 'Inter', sans-serif;
+            font-weight: extra-light;
+            
         }
+        .main-content h1 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 200;
+            /* Additional styling */
+             font-size: 2.5em;
+            }
+        .main-content h2 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 200;
+            /* Additional styling */
+            font-size: 2em;
+        }
+
     </style>
 </head>
 <body>
     <header>
         <div id="logo-section">
-            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Debianem Cinema Logo">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Debianem Cinema Logo">
+            </a>
             <h1>Debianem Cinema</h1>
         </div>
         <nav>
@@ -284,6 +316,7 @@
             </div>
         </nav>
     </header>
+    <div class="background-image-container"></div>
     <!-- Content for watch and dine experience -->
     <div class="main-content">
         <h1>Welcome to Watch & Dine Experience</h1>
@@ -302,7 +335,8 @@
         <p>Ready to elevate your movie night? Book your Watch & Dine experience now and treat yourself to a unique blend of entertainment and dining, <b><i>By calling 08012344567</b></i></p>
     
     </div>
-    
+    <div class="footer-image-container">
+    </div>
 </body>
 <footer>
     <a href="index.html">&copy; 2024 Debianem Cinema</a>

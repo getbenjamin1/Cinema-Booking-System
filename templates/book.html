@@ -150,8 +150,10 @@
 <body>
     <header>
         <button class="button" onclick="window.history.back()">Back</button>
-        <div id = "logo-section">
-            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Debianem Cinema Logo">
+        <div id="logo-section">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Debianem Cinema Logo">
+            </a>
             <h1>Debianem Cinema</h1>
         </div>
     </header>

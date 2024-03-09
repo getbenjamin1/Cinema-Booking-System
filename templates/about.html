@@ -7,7 +7,8 @@
     <title>Cinema Booking</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            /*font-family: Arial, sans-serif; */
+            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
@@ -104,7 +105,12 @@
         h2 {
             color: #152238;
             width: 100%;
+            font-family: 'Inter', sans-serif;
+            font-weight: 200;
+            font-size: 2em;
         }
+
+        
 
         .movie {
             width: calc(33.33% - 20px);
@@ -267,7 +273,24 @@
         }
         .main-content {
             padding: 20px;
+            display: flex; /* This turns .main-content into a flex container */
+            justify-content: space-between; /* This will space out the child elements */
+            align-items: center; /* This will vertically align the child elements in the center */
+   
         }
+        .about-us, .about-image {
+    flex: 1; /* This gives both columns an equal amount of space */
+    padding: 0 20px; /* This adds some spacing between the text and the image */
+}
+.about-image {
+    /* Adjust the width as needed, or remove this if you want equal widths */
+    max-width: 50%;
+}
+.about-image img {
+    width: 100%; /* This makes the image responsive, adjusting to the width of the .about-image div */
+    height: auto; /* This preserves the aspect ratio of the image */
+}
+
     </style>
 </head>
 
@@ -275,8 +298,11 @@
 <header>
 
 <div id="logo-section">
-    <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Debianem Cinema Logo">
-<h1>Debianem Cinema</h1>
+    <a href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Debianem Cinema Logo">
+    </a>
+   <h1>Debianem Cinema</h1>
+
 </div>
 <nav>
     <div id="tab-container">
@@ -288,6 +314,7 @@
 </nav>
 </header>
 <div class="main-content">
+    <div class="about-us">
     <h2>About Us</h2>
     <p>Welcome to Debianem Cinema, where cinematic magic comes to life. We take pride in delivering an unparalleled
         movie-watching experience, blending cutting-edge technology, diverse film selections, and a commitment to
@@ -302,6 +329,11 @@
     <p>Join us at Debianem Cinema, where each frame tells a story, and every moment is an opportunity to create
         lasting memories. We look forward to making your movie experience unforgettable.</p>
 
+    </div>
+    <div class="about-image">
+        <!-- Image of the team -->
+        <img src="static/meetTheTeam.jpg" alt="Our Team">
+    </div>
     </div>
 </body>
 <footer>

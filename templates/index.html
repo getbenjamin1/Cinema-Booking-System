@@ -47,7 +47,7 @@
             margin-bottom: 20px;
         }
 
-
+        
         #search-bar {
             position: absolute;
             top:0;
@@ -56,12 +56,13 @@
             height: 50px;
             padding: 10px;
             background-color: #152238;
+            margin: 10px 0;
         }
         #search-bar label {
             color: #fff;
             font-weight: normal;
             font-family: 'Klavia';
-        }
+        } 
         #search-bar input {
             height: 100%;
             padding: 10px;
@@ -80,8 +81,7 @@
         /* padding-top: 80px; */
         width: 100%;
         box-sizing: border-box;
-        }
-
+    }
         #movies {
             display: flex;
             flex-wrap: wrap;
@@ -139,7 +139,10 @@
             max-width: 100%;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             box-sizing: border-box;
-            font-family: 'Klavia';
+            /* font-family: 'Klavia'; */
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 2em;
         }
 
         #movieDetails h3 {
@@ -247,7 +250,9 @@
 <body>
     <header>
         <div id = "logo-section">
-            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Debianem Cinema Logo">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Debianem Cinema Logo">
+            </a>
             <h1>Debianem Cinema</h1>
         </div>
         <div id="search-bar">
