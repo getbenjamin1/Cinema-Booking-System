@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>{{ movie.Name }} - Movie Details</title>
+    <style>
+        body {
+            font-family: 'Klavia';
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background: linear-gradient(#3498db, #1abc9c); /*added background colour*/
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content horizontally */
+        }
+
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+      /*  header {
+            background-color: #152238;
+            color: #fff;
+            text-align: justify;
+            padding: 1em 0;
+            width: 100%; /* Ensure header spans the full width */
+            /*position: fixed; /* Fix header at the top */
+            /*top: 0; /* Align header to the top */
+            /*z-index: 1000; /* Set higher z-index to make sure it's above other content */
+        /*}*/
+
+        header {
+            background-color: #152238;
+            color: #fff;
+            padding: 1em 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        header img {
+            max-width: 100px;
+            margin-right: 10px;
+        }
+            
+        header h1 {
+            font-family: 'Klavia';
+            margin: 0;
+        }
+        #logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /*margin-bottom: 20px;*/
+            flex-grow: 1; /* Ensures it takes up the maximum available space */
+            text-align: center;
+        }
+
+        footer {
+            background-color: #152238;
+            color: #fff;
+            text-align: center;
+            padding: 1em 0;
+            /*position: fixed; /* Fix footer at the bottom */
+            bottom: 0; /* Align footer to the bottom */
+            width: 100%; /* Ensure footer spans the full width */
+            z-index: 1000; /* Set higher z-index to make sure it's above other content */
+            font-family: 'Klavia';
+        }
+        footer a {
+            color: #fff; /* Set the text color to white */
+            text-decoration: none; /* Remove the default underline for links */
+        }
+
+        .content {
+            max-width: 800px;
+            margin-top: 50px; /* Adjust margin to accommodate fixed header */
+            margin-bottom: 50px; /* Adjust margin to accommodate fixed footer */
+            padding: 20px;
+            border: 1px solid #fff;
+            border-radius: 10px;
+            /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+            background-color: #152238;
+            color: #fff;
+            /* background-color: rgba(255, 255, 255, 0.8);
+            color: #152238; */
+            box-sizing: border-box;
+        } 
+
+        .movie-details {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 800px;
+            margin-top: 20px;
+        }
+
+        .movie-details img {
+            max-width: 250px;
+            margin-right: 20px;
+        }
+
+        .movie-info {
+            flex: 1; /* Take remaining space */
+        }
+
+        .movie-info p {
+            margin: 0 0 10px; /* Add some bottom margin for spacing */
+        }
+
+        .description-trailer {
+            display: flex;
+            justify-content: space-between; /* Space between description and trailer */
+            align-items: flex-start; /* Align items at the start (top) */
+            max-width: 800px;
+            margin-top: 20px;
+        }
+
+        .description {
+            flex: 1; /* Take remaining space */
+        }
+
+        .trailer {
+            flex: 1; /* Take remaining space */
+            margin-left: 20px; /* Add some left margin for spacing */
+        }
+
+        .button {
+            margin-left: 1em; /* Adjust as necessary for spacing from the left edge */
+            margin-right: auto; /* Pushes everything else to the right */
+        }
+        
+        button {
+            background-color: #152238;
+            color: #fff;
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            /*margin-left: 15px;*/
+        }
+
+        button:hover {
+            background-color: #fff;
+            color: #152238;
+            transform: scale(1.05);
+            transition: transform 0.5s;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button class="button" onclick="window.history.back()">Back</button>
+        <div id = "logo-section">
+            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Debianem Cinema Logo">
+            <h1>Debianem Cinema</h1>
+        </div>
+    </header>
+
+    <div class="content">
+        <h1>{{ movie.Name }}</h1>
+
+        <div class="movie-details">
+            <img src="{{ movie.Image }}" alt="{{ movie.Name }} Poster">
+            <div class="movie-info">
+                <p><strong>Genre:</strong> {{ movie.Genre }}</p>
+                <p><strong>Duration:</strong> <span id="formattedDuration"></span></p>
+                <p><strong>Category:</strong> {{ movie.Category }}</p>
+                <p><strong>Language:</strong> {{ movie.Language }}</p>
+                <p><strong>Rating:</strong> {{ movie.Rating }}/10</p>
+                <br>
+                <div class="trailer">
+                    <iframe width="450" height="215" src="{{ movie.Trailer }}" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <div class="description-trailer">
+            <div class="description">
+                <p><strong><h3>Description:</h3></strong> {{ movie.Description }}</p>
+                <button class="button" onclick="bookTicket()">Book Now</button>
+            </div>
+          <!--  <div class="trailer">
+                <iframe width="500" height="315" src="{{ movie.Trailer }}" frameborder="0" allowfullscreen></iframe>
+            </div>-->
+        </div>
+    </div>
+
+    <footer>
+        <a href="{{ url_for('index') }}">&copy; 2024 Debianem Cinema</a>
+    </footer>
+
+    <script>
+        function formatDuration(durationInHours) {
+            const hours = Math.floor(durationInHours);
+            const minutes = Math.round((durationInHours - hours) * 60);
+            return `${hours}h ${minutes}m`;
+        }
+
+        const movieDuration = "{{ movie.Duration }}";
+        const durationInHours = parseFloat(movieDuration);
+        const formattedDuration = formatDuration(durationInHours);
+        document.getElementById('formattedDuration').textContent = formattedDuration;
+
+        function bookTicket() {
+            window.location.href = `/book/{{ movie.Movie_ID }}`;
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debianem Cinema</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        .header {
+            background-color: blue;
+            color: white;
+            padding: 10px;
+        }
+        .home-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: blue;
+            color: white;
+            padding: 10px;
+            border: none;
+        }
+        .download-button {
+            background-color: blue;
+            color: white;
+            padding: 10px;
+            border: none;
+            margin-top: 20px;
+        }
+        .ticket-image {
+            margin-top: 20px;
+        }
+        .instructions {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Debianem Cinema</h1>
+    </div>
+    <button class="home-button" onclick="window.location.href='/'">Return to Homepage</button>
+    <img class="ticket-image" src="data:image/png;base64,{{ image_data }}" alt="Ticket Image">
+    <div class="instructions">PLEASE SAVE AND SHOW TO CASHIER.</div>
+    <a href="data:image/png;base64,{{ image_data }}" download="ticket.png">
+        <button class="download-button">Download Ticket</button>
+    </a>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Show</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit Show</h1>
+    <form method="POST" action="{{ url_for('edit_show', id=show.Show_ID) }}">
+        <label for="movie_id">Movie ID:</label>
+        <input type="text" id="movie_id" name="movie_id" value="{{ show.Movie_ID }}" >
+        <label for="show_date">Show Date:</label>
+        <input type="text" id="show_date" name="show_date" value="{{ show.Show_Date }}" >
+        <label for="time">Show Time:</label>
+        <input type="text" id="time" name="time" value="{{ show.Show_Time }}">
+        <label for="show_id" >Show ID:</label>
+        <input type="text" id="show_id" name="show_id" value="{{ show.Show_ID }}">
+        <input type="text" id="screen_id" name="screen_id" value="{{ show.Screen_ID }}" style="display: none;">
+        <label for="seats_remaining">Seats Remaining:</label>
+        <input type="text" id="seats_remaining" name="seats_remaining" value="{{ show.Seats_Remaining }}">
+
+        <input type="submit" value="Edit Show">
+    </form>
+</body>
+</html>
