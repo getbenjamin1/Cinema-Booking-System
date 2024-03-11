@@ -59,6 +59,7 @@ class Booking(db.Model):
 def ensureAuth():
     if 'admin_logged_in' not in session:
         return redirect(url_for('admin_login'))
+    return None
     
 def getShows():
     shows = Show.query.all()
@@ -95,7 +96,9 @@ def view_ticket():
 
 @app.route('/admin/bookings')
 def admin_bookings():
-    ensureAuth()
+    r = ensureAuth()
+    if r is not None:
+        return r
     bookings = Booking.query.all()
     return render_template('admin_bookings.html', bookings=bookings)
 
@@ -136,14 +139,18 @@ def book_show():
 
 @app.route('/admin/management', methods=['GET', 'POST'])
 def test():
-    ensureAuth()
+    r = ensureAuth()
+    if r is not None:
+        return r
     shows = getShows()
     screens = getScreens()
     return render_template('admin_screens_shows.html', screens=screens, shows=shows)
 
 @app.route('/admin/deleteShow/<id>', methods=['POST'])
 def delete_show(id):
-    ensureAuth()
+    r = ensureAuth()
+    if r is not None:
+        return r
     show = Show.query.get(id)
     db.session.delete(show)
     db.session.commit()
@@ -151,7 +158,9 @@ def delete_show(id):
 
 @app.route('/admin/deleteScreen/<id>', methods=['POST'])
 def delete_screen(id):
-    ensureAuth()
+    r = ensureAuth()
+    if r is not None:
+        return r
 
     screen = Screen.query.get(id)
 
@@ -171,13 +180,17 @@ def movie(movie_id):
 
 @app.route('/admin/screens')
 def admin_screens():
-    ensureAuth()
+    r = ensureAuth()
+    if r is not None:
+        return r
 
     screens = getScreens()
     return render_template('admin_screens.html', screens=screens)
 @app.route('/admin/editScreen/<screen_id>', methods=['GET', 'POST'])
 def edit_screen(screen_id):
-    ensureAuth()
+    r = ensureAuth()
+    if r is not None:
+        return r
 
     screen = Screen.query.get(screen_id)
 
@@ -196,7 +209,9 @@ def edit_screen(screen_id):
 
 @app.route('/admin/editShow/<id>', methods=['GET', 'POST'])
 def edit_show(id):
-    ensureAuth()
+    r = ensureAuth()
+    if r is not None:
+        return r
     
     show = Show.query.get(id)
     movie = Movie.query.get(show.Movie_ID) 
@@ -218,7 +233,9 @@ def create_screen():
     highest_screen = Screen.query.order_by(Screen.Screen_ID.desc()).first()
     new_id = int(highest_screen.Screen_ID) + 1  #==
 
-    ensureAuth()
+    r = ensureAuth()
+    if r is not None:
+        return r
     if request.method == 'POST':
         highest_screen = Screen.query.order_by(Screen.Screen_ID.desc()).first()
         no_of_seats = request.form.get('no_of_seats')
@@ -233,7 +250,9 @@ def create_screen():
 def create_show():
     global new_id
     new_id = int(Show.query.order_by(Show.Show_ID.desc()).first().Show_ID) + 1
-    ensureAuth()
+    r = ensureAuth()
+    if r is not None:
+        return r
     if request.method == 'POST':
         new_show = Show(Show_ID=new_id, Movie_ID=request.form.get('movie_id'), Show_Date=request.form.get('show_date'), Screen_ID=request.form.get('screen_id'), Show_Time=request.form.get('time'), Seats_Remaining=request.form.get('seats_remaining'))
         db.session.add(new_show)
@@ -244,7 +263,9 @@ def create_show():
    
 @app.route('/admin/editMovie/<id>', methods=['GET', 'POST'])
 def edit_movie(id):
-    ensureAuth()
+    r = ensureAuth()
+    if r is not None:
+        return r
     movie = Movie.query.get(id)
     if request.method == 'POST':
         movie.Name = request.form.get('name')
@@ -262,7 +283,9 @@ def edit_movie(id):
 
 @app.route('/admin/api/delete/<id>', methods=['POST'])
 def delete_movie(id):
-    ensureAuth()
+    r = ensureAuth()
+    if r is not None:
+        return r
     movie = Movie.query.get(id)
     db.session.delete(movie)
     db.session.commit()
@@ -270,7 +293,9 @@ def delete_movie(id):
 
 @app.route('/admin/createMovie', methods=['GET', 'POST'])
 def create_movie():
-    ensureAuth()
+    r = ensureAuth()
+    if r is not None:
+        return r
     if request.method == 'POST':
         new_id = int(Movie.query.order_by(Movie.Movie_ID.desc()).first().Movie_ID) + 1
         new_movie = Movie(Movie_ID=new_id, Name=request.form.get('name'), Genre=request.form.get('genre'), Duration=request.form.get('duration'), Image=request.form.get('image'), Description=request.form.get('description'), Category=request.form.get('category'), Language=request.form.get('language'), Rating=request.form.get('rating'), Trailer=request.form.get('trailer'))
@@ -281,22 +306,28 @@ def create_movie():
 
 @app.route('/admin')
 def admin():
-    ensureAuth()
+    r = ensureAuth()
+    if r is not None:
+        return r
     return render_template('admin_splash.html')
 
 @app.route('/admin/movies')
 def admin_movies():
-    ensureAuth()
+    r = ensureAuth()
+    if r is not None:
+        return r
     movies = getMovies()
     return render_template('admin_movies.html', movies=movies)
 
 @app.route('/admin/shows')
 def admin_shows():
-    ensureAuth()
+    r = ensureAuth()
+    if r is not None:
+        return r
     shows = getShows()
     return render_template('admin_shows.html', shows=shows)
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
         username = request.form.get('username')

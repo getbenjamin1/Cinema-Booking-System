@@ -55,7 +55,6 @@
             color: #fff;
             height: 50px;
             padding: 10px;
-            background-color: #152238;
             margin: 10px 0;
         }
         #search-bar label {
@@ -209,27 +208,31 @@
             justify-content: center;
         }
 
-        .tab {
-            color: #fff;
-            text-decoration: none;
-            padding: 10px;
-            margin-right: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #fff;
-            border-radius: 5px;
-        }
-        .tab.active {
-            background-color: #fff; /* Background color for active tab */
-            color: #152238; /* Text color for active tab */
-        }
-        .tab:hover {
-            background-color: #fff;
-            color: #152238;
-        }
-        .tab.active:hover {
-            background-color: #152238;
-            color: #fff;
-        }
+        .tab, .tab2 {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+}
+
+.tab.active, .tab2.active {
+    background-color: #fff; /* Background color for active tab */
+    color: #152238; /* Text color for active tab */
+}
+
+.tab:hover, .tab2:hover {
+    background-color: #fff;
+    color: #152238;
+}
+
+.tab.active:hover, .tab2.active:hover {
+    background-color: #152238;
+    color: #fff;
+}
+
 
                #subtab-container {
             display: flex;
@@ -273,8 +276,8 @@
     
     <!-- Tabs container -->
     <div id="subtab-container">
-        <div class="tab active" onclick="showNowShowing()">Now Showing</div>
-        <div class="tab" onclick="showAllMovies()">All Movies</div>
+        <div class="tab2 active" onclick="showNowShowing()">Now Showing</div>
+        <div class="tab2" onclick="showAllMovies()">All Movies</div>
     </div>
 
     <section>
@@ -324,8 +327,8 @@
     function showNowShowing() {
         document.getElementById('now-showing-section').style.display = 'block';
         document.getElementById('all-movies-section').style.display = 'none';
-        document.querySelector('.tab.active').classList.remove('active');
-        document.querySelector('.tab:nth-child(1)').classList.add('active');
+        document.querySelector('.tab2.active').classList.remove('active');
+        document.querySelector('.tab2:nth-child(1)').classList.add('active');
         fetch('/api/now-showing')
             .then(response => response.json())
             .then(data => {
@@ -338,8 +341,8 @@
     function showAllMovies() {
         document.getElementById('now-showing-section').style.display = 'none';
         document.getElementById('all-movies-section').style.display = 'block';
-        document.querySelector('.tab.active').classList.remove('active');
-        document.querySelector('.tab:nth-child(2)').classList.add('active');
+        document.querySelector('.tab2.active').classList.remove('active');
+        document.querySelector('.tab2:nth-child(2)').classList.add('active');
         fetch('/api/all-movies')
             .then(response => response.json())
             .then(data => {
