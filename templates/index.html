@@ -47,16 +47,10 @@
             margin-bottom: 20px;
         }
 
-        
-        #search-bar {
-            position: absolute;
-            top:0;
-            right: 0;
-            color: #fff;
-            height: 50px;
-            padding: 10px;
-            margin: 10px 0;
-        }
+     #search-bar {
+    color: #fff;
+    text-align: center;
+}
         #search-bar label {
             color: #fff;
             font-weight: normal;
@@ -66,6 +60,7 @@
             height: 100%;
             padding: 10px;
             box-sizing: border-box;
+            width:260px;
         }
         #search-results {
             margin-top: 60px;
@@ -234,10 +229,10 @@
 }
 
 
-               #subtab-container {
+            #subtab-container {
             display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
+            justify-content: center;
+            margin-bottom: 0px;
         }
         /* Adjust the translateX values based on the number of tabs/content sections you have */
         #now-showing {
@@ -258,12 +253,6 @@
             </a>
             <h1>Debianem Cinema</h1>
         </div>
-        <div id="search-bar">
-            <label for="search">Search:</label>
-            <input type="text" id="search" placeholder="Enter keywords">
-            <button onclick="searchMovies()">Search</button>
-            <div id="search-results"></div>
-        </div>
         <!-- new tabs -->
         <div id="tab-container">
             <a href="/" class="tab active">Home</a>
@@ -275,14 +264,17 @@
     </header>
     
     <!-- Tabs container -->
+    
     <div id="subtab-container">
-        <div class="tab2 active" onclick="showNowShowing()">Now Showing</div>
-        <div class="tab2" onclick="showAllMovies()">All Movies</div>
+        <div class="tab2 active" onclick="showAllMovies()">All Movies</div>
+        <div class="tab2" onclick="showNowShowing()">Now Showing</div>
+    </div>
+    <div id="search-bar">
+        <input type="text" id="search" placeholder="Enter movie name...">
     </div>
 
     <section>
-        <div id="now-showing-section" class="movie-section">
-          <h2>Now Showing</h2>
+        <div id="now-showing-section" class="movie-section" style="display: none;">
           <div id="movies">
           {% for screen_id in screen_ids %}
                   {% for show in shows[screen_id] %}
@@ -294,10 +286,8 @@
             {% endfor %}
          </div>
     </div>
-      
-          <div id="all-movies-section" class="movie-section" style="display: none;">
+          <div id="all-movies-section" class="movie-section">
               <!-- All Movies content will be dynamically populated here -->
-              <h2>Movies Available</h2>
               <div id="movies" class="all-movies-grid">
                   {% for movie in movies %}
                   <div class="movie" onclick="showMovieDetails({{ movie.Movie_ID }})">
@@ -328,7 +318,9 @@
         document.getElementById('now-showing-section').style.display = 'block';
         document.getElementById('all-movies-section').style.display = 'none';
         document.querySelector('.tab2.active').classList.remove('active');
-        document.querySelector('.tab2:nth-child(1)').classList.add('active');
+        document.querySelector('.tab2:nth-child(2)').classList.add('active');
+        document.getElementById('search-bar').style.display = 'none';
+
         fetch('/api/now-showing')
             .then(response => response.json())
             .then(data => {
@@ -342,7 +334,8 @@
         document.getElementById('now-showing-section').style.display = 'none';
         document.getElementById('all-movies-section').style.display = 'block';
         document.querySelector('.tab2.active').classList.remove('active');
-        document.querySelector('.tab2:nth-child(2)').classList.add('active');
+        document.querySelector('.tab2:nth-child(1)').classList.add('active');
+        document.getElementById('search-bar').style.display = 'block';
         fetch('/api/all-movies')
             .then(response => response.json())
             .then(data => {
@@ -407,29 +400,31 @@ function displayMovies(movies, sectionId) {
     function showMovieDetails(movieID) {
         window.location = '/movies/' + movieID;
     }
-
-    // Add an event listener to the search input
-    document.getElementById('search').addEventListener('input', function() {
-        var searchInput = this.value.trim(); // Trim whitespace
-
-        // Check if search input is empty
-        if (searchInput === '') {
-            // Reload the page
-            window.location.reload();
-            return; // Stop execution
-        }
-    });
+    var lastSearchValue = '';
 
     function searchMovies() {
-        var searchInput = document.getElementById('search').value.trim(); // Trim whitespace
+    var searchInput = document.getElementById('search').value.trim();
 
+    if (searchInput !== lastSearchValue) {
         fetch('/api/search?q=' + searchInput)
             .then(response => response.json())
             .then(data => {
-                displaySearchMovies(data, 'now-showing-section');
+                displaySearchMovies(data, 'all-movies-section');
             })
             .catch(error => console.error('Error fetching search results:', error));
+
+        lastSearchValue = searchInput;
     }
+}
+
+function refreshSearch() {
+    setInterval(searchMovies, 150);
+}
+
+    window.onload = function () {
+        showAllMovies();
+        refreshSearch();
+    };
 
 // Function to display movies in the specified section
 function displaySearchMovies(movies, sectionId) {
