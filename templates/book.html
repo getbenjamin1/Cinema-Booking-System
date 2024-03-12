@@ -56,7 +56,7 @@
             z-index: 1000; /* Set higher z-index to make sure it's above other content */
             font-family: 'Klavia';
             /*position: fixed; /* Fix footer at the bottom */
-            bottom: 0; Align footer to the bottom
+            bottom: 0;
         }
         footer a {
             color: #fff; /* Set the text color to white */
@@ -167,7 +167,7 @@
                     <h2>{{ movie.Name }} - Show {{ show.Show_ID }}</h2>
                     <p>Date: {{ show.Show_Date }}, Time: {{ show.Show_Time }}</p>
                     <p>Screen ID: {{ show.Screen_ID }}, Seats Remaining: {{ show.Seats_Remaining }}</p>
-                    <button onclick="selectShow('{{ show.Show_ID }}')">Select Show</button>
+                    <button onclick="Show_ID = {{ show.Show_ID }}; selectShow({{ show.Show_ID }})">Select Show</button>
                 </div>
             {% endfor %}
         {% else %}
@@ -192,7 +192,7 @@
         <input type="text" id="CVV" placeholder="CVV">
 
         <button onclick="submitBooking()">Book Now</button>
-        <input type="hidden" id="Show_ID" name="Show_ID">
+        <input type="hidden" id="Show_ID" name="Show_ID" >
     </div>
 
     <footer>
@@ -200,17 +200,8 @@
     </footer>
 
     <script>
-    var currentURL = window.location.href;
-
-    var match = currentURL.match(/\/book\/(\d+)/);
-
-    if (match) {
-        Show_ID = parseInt(match[1], 10);
-        console.log("show_ID:", Show_ID);
-    } else {
-        console.log("Show_ID not found in the URL");
-    }
     var ticket_id;
+    var Show_ID;
         function selectShow(showID) {
         var showContainers = document.getElementsByClassName('show');
         for (var i = 0; i < showContainers.length; i++) {
