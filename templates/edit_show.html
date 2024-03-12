@@ -58,14 +58,13 @@
         <input type="text" id="movie_id" name="movie_id" value="{{ show.Movie_ID }}" >
         <label for="show_date">Show Date:</label>
         <input type="text" id="show_date" name="show_date" value="{{ show.Show_Date }}" >
-        <label for="time">Show Time:</label>
+        <label for="time">Show Time (format: 15:00:00):</label>
         <input type="text" id="time" name="time" value="{{ show.Show_Time }}">
-        <label for="show_id" >Show ID:</label>
-        <input type="text" id="show_id" name="show_id" value="{{ show.Show_ID }}">
-        <input type="text" id="screen_id" name="screen_id" value="{{ show.Screen_ID }}" style="display: none;">
+        <label for="show_id" >Screen Number:</label>
+        <input type="text" id="show_id" name="show_id" value="{{ show.Show_ID }}" style="display:none">
+        <input type="text" id="screen_id" name="screen_id" value="{{ show.Screen_ID }}">
         <label for="seats_remaining">Seats Remaining:</label>
         <input type="text" id="seats_remaining" name="seats_remaining" value="{{ show.Seats_Remaining }}">
-
         <input type="submit" value="Edit Show">
     </form>
 </body>
