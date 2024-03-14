@@ -76,7 +76,7 @@ def getScreens():
 
 def subtractSeat(sID, n):
     show = Show.query.get(sID)
-    show.Seats_Remaining -= n
+    show.Seats_Remaining -= int(n)
     db.session.commit()
 
 @app.route('/viewTicket', methods=['POST'])
@@ -116,6 +116,7 @@ def book(Movie_ID):
 
 @app.route('/bookShow', methods=['POST'])
 def book_show():
+    print(request.form)
     Show_ID = request.form.get('Show_ID')
     latest_booking = db.session.query(db.func.max(Booking.Booking_ID)).scalar()
     latest_booking = int(latest_booking[1:]) if latest_booking else 0
