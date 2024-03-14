@@ -97,19 +97,20 @@
             flex-wrap: wrap; /* Allow wrapping if the screen is too small */
             justify-content: space-between; /* Center the shows */
             align-items: flex-start;
-            /*gap: 20px; /* Add some space between the shows */
+            gap: 20px; /* Add some space between the shows */
         }
 
         .show {
             position: relative;
+            width: calc(33.333% - 20px); /* Subtract the total margin from the width */
+            /*width: calc((100% - 40px) / 3);*/
+            margin: 10px; /* Half the desired space between shows */
             margin-bottom: 20px;
             padding: 15px;
             background-color: #152238;
             color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
-            flex: 1; /* Each show will flex to fill the space */
-            /*min-width: calc(50% - 20px); /* Minimum width for smaller screens, subtract the gap */
         }
 
         .show h2 {
@@ -122,13 +123,20 @@
             margin-bottom: 10px;
         }
 
+        /* For smaller screens, fit two shows per line */
+    /*    @media screen and (max-width: 1200px) {
+            .show {
+                width: calc(50% - 20px); 
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .show {
+                width: calc(100% - 20px); 
+            }
+        } /* For mobile screens, fit one show per line */
+
         .booking-form {
-            /* max-width: 400px;
-            margin: 20px auto;
-            padding: 15px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px; */
             position: relative;
             margin-bottom: 20px;
             padding: 15px;
