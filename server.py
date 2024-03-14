@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import distinct
 from sqlalchemy.sql import text
 from sqlalchemy.schema import CheckConstraint
+from sqlalchemy.orm import joinedload
 from werkzeug.security import generate_password_hash, check_password_hash
 import qrcode
 from io import BytesIO
@@ -73,6 +74,11 @@ def getScreens():
     screens = Screen.query.all()
     return screens
 
+def subtractSeat(sID, n):
+    show = Show.query.get(sID)
+    show.Seats_Remaining -= int(n)
+    db.session.commit()
+
 @app.route('/viewTicket', methods=['POST'])
 def view_ticket():
     ticket_id_b64 = request.data.decode('utf-8')
@@ -110,6 +116,7 @@ def book(Movie_ID):
 
 @app.route('/bookShow', methods=['POST'])
 def book_show():
+    print(request.form)
     Show_ID = request.form.get('Show_ID')
     latest_booking = db.session.query(db.func.max(Booking.Booking_ID)).scalar()
     latest_booking = int(latest_booking[1:]) if latest_booking else 0
@@ -134,6 +141,7 @@ def book_show():
     )
     db.session.add(booking)
     db.session.commit()
+    subtractSeat(Show_ID, No_of_Tickets)
 
     return new_booking_id, 200
 
@@ -391,6 +399,7 @@ def get_all_movies():
 @app.route('/api/search', methods=['GET'])
 def search():
     query = request.args.get('q', '')
+    db.session.commit()
     results = Movie.query.filter(Movie.Name.ilike(f'%{query}%')).all()
     return jsonify([{
         'Movie_ID': movie.Movie_ID,
