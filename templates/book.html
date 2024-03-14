@@ -93,6 +93,11 @@
         .show-container {
             max-width: 800px;
             margin: 20px auto auto;
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping if the screen is too small */
+            justify-content: space-between; /* Center the shows */
+            align-items: flex-start;
+            /*gap: 20px; /* Add some space between the shows */
         }
 
         .show {
@@ -103,6 +108,8 @@
             color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
+            flex: 1; /* Each show will flex to fill the space */
+            /*min-width: calc(50% - 20px); /* Minimum width for smaller screens, subtract the gap */
         }
 
         .show h2 {
