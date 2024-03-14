@@ -228,20 +228,20 @@
     color: #fff;
 }
 
+#subtab-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0px;
+    padding-top: 10px;
+}
+/* Adjust the translateX values based on the number of tabs/content sections you have */
+#now-showing {
+    transform: translateX(0%);
+}
 
-            #subtab-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 0px;
-        }
-        /* Adjust the translateX values based on the number of tabs/content sections you have */
-        #now-showing {
-            transform: translateX(0%);
-        }
-
-        #all-movies {
-            transform: translateX(100%);
-        }
+#all-movies {
+    transform: translateX(100%);
+}
     </style>
 </head>
 
@@ -266,8 +266,8 @@
     <!-- Tabs container -->
     
     <div id="subtab-container">
-        <div class="tab2 active" onclick="showAllMovies()">All Movies</div>
-        <div class="tab2" onclick="showNowShowing()">Now Showing</div>
+        <div class="tab2 active" onclick="showAllMovies()"><b>All Movies</b></div>
+        <div class="tab2" onclick="showNowShowing()"><b>Now Showing</b></div>
     </div>
     <div id="search-bar">
         <input type="text" id="search" placeholder="Enter movie name...">
