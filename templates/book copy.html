@@ -131,7 +131,6 @@
             color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
-
         }
 
         .booking-form label {
@@ -198,77 +197,31 @@
         <input type="text" id="CVV" placeholder="CVV">
 
         <button onclick="submitBooking()" class="button" >Book Now</button>
-        <input type="hidden" id="Show_ID" name="Show_ID">
+        <input type="hidden" id="Show_ID" name="Show_ID" >
     </div>
-    
 
     <footer>
         <a href="{{ url_for('index') }}">&copy; 2024 Debianem Cinema</a>
     </footer>
 
     <script>
-    var currentURL = window.location.href;
-
-    var match = currentURL.match(/\/book\/(\d+)/);
-
-    if (match) {
-        Show_ID = parseInt(match[1], 10);
-        console.log("show_ID:", Show_ID);
-    } else {
-        console.log("Show_ID not found in the URL");
-    }
     var ticket_id;
-function selectShow(showID) {
-    // Hide all show containers
+    var Show_ID;
+    function selectShow(showID) {
     var showContainers = document.getElementsByClassName('show');
     for (var i = 0; i < showContainers.length; i++) {
         showContainers[i].style.display = 'none';
     }
 
-    // Display the booking form
-    var bookingForm = document.getElementById('bookingForm');
-    bookingForm.style.display = 'block';
-
-    // Find the selected show container and display it
-    var selectedShowContainer;
-    for (var i = 0; i < showContainers.length; i++) {
-        var show = showContainers[i];
-        var showButton = show.querySelector('button');
-        if (showButton.getAttribute('onclick').includes(showID)) {
-            selectedShowContainer = show;
-            break;
-        }
-    }
-     
-    // Ensure the selected show container is displayed and insert the booking form after the show details
-    if (selectedShowContainer) {
-        selectedShowContainer.style.display = 'block';
-        
-        // Assuming you found the button, change its text to "Selected Show"
-        var selectButton = selectedShowContainer.querySelector('button');
-        if (selectButton) {
-            selectButton.textContent = "Selected Show";
-            selectButton.style.backgroundColor = "green"; // Make the button green
-            selectButton.style.borderColor = "white"; // Optional: Change border color for better visibility
-            // Disable the button to prevent multiple clicks
-            selectButton.disabled = true;
-        }
-        
-        // Move the booking form inside the selected show container or after it, depending on desired UX
-        // For inside, at the end:
-        selectedShowContainer.appendChild(bookingForm);
-        // Or for after the selected show:
-        // selectedShowContainer.insertAdjacentElement('afterend', bookingForm);
-    }
-
-    // Update the hidden Show_ID input field with the selected show ID
-    document.getElementById('Show_ID').value = showID;   
+    document.getElementById('Show_ID').value = showID; // Update Show_ID value
+    document.getElementById('bookingForm').style.display = 'block';
 }
-
+        
 function submitBooking() {
     // Gather data from form fields
     var Show_ID = document.getElementById('Show_ID').value;
     var Amount = document.getElementById('No_of_Tickets').value;
+    alert(Amount)
 
     // Create a new FormData object
     var formData = new FormData();
@@ -287,7 +240,6 @@ function submitBooking() {
         if (xhr.status >= 200 && xhr.status < 300) {
             // Request was successful
             console.log('Success:', xhr.responseText);
-            showTicket();
         } else {
             // Request failed
             console.error('Request failed with status:', xhr.status);
