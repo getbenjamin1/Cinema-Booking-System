@@ -91,25 +91,28 @@
         }
 
         .show-container {
-            max-width: 800px;
-            margin: 20px auto auto;
+            /*width: 100%; /* Use 100% if you want the container to be responsive */
             display: flex;
-            flex-wrap: wrap; /* Allow wrapping if the screen is too small */
-            justify-content: space-between; /* Center the shows */
+            flex-wrap: wrap;
+            margin: 20px auto auto;
+            justify-content: flex-start; /* This will distribute space around the items evenly */
+            gap: 20px; /* Adjust the gap as necessary */
             align-items: flex-start;
-            /*gap: 20px; /* Add some space between the shows */
+     /*       padding-right: 10px;*/
+            padding-left: 10%;
         }
-
         .show {
-            position: relative;
+            /*position: relative;*/
+            /*width: calc(33.333% - 40px); /* Subtract the total margin from the width */
+            flex: 0 0 calc((100% / 3) - (90px + 20px));
+            margin: 10px ; /* Half the desired space between shows */
             margin-bottom: 20px;
             padding: 15px;
             background-color: #152238;
             color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
-            flex: 1; /* Each show will flex to fill the space */
-            /*min-width: calc(50% - 20px); /* Minimum width for smaller screens, subtract the gap */
+            box-sizing: border-box;
         }
 
         .show h2 {
@@ -122,6 +125,32 @@
             margin-bottom: 10px;
         }
 
+        /* For smaller screens, fit two shows per line */
+    /*    @media screen and (max-width: 1200px) {
+            .show {
+                width: calc(50% - 20px); 
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .show {
+                width: calc(100% - 20px); 
+            }
+        } /* For mobile screens, fit one show per line */
+
+        @media (max-width: 1200px) {
+            .show {
+                flex-basis: calc(50% - 40px); /* Two shows per line on smaller screens */
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .show {
+                flex-basis: 80%; /* One show per line on mobile screens */
+           /*     flex: none;*/
+            }
+        }
+            
         .booking-form {
             position: relative;
             margin-bottom: 20px;
