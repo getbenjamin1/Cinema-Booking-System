@@ -142,8 +142,9 @@
             flex-wrap: wrap;
             gap: 20px;
             justify-content: center; /* Centers shows in the row */
-            margin: 5% auto 10% auto; /* Centers show-container */
+            margin: 5% auto auto auto; /* Centers show-container */
             max-width: 1200px; /* Adjust as needed */
+            padding-bottom:20px;
         }
         
         .show {
@@ -163,6 +164,7 @@
         /* Add this to create a pseudo-element that acts like a flex item */
         .show-container::after {
             content: '';
+            padding-bottom:20px;
         }
         .show h2 {
             color: linear-gradient(#3498db, #1abc9c);
