@@ -462,17 +462,23 @@ function submitBooking() {
     // Configure the POST request
     xhr.open('POST', '/bookShow', true);
 
-    // Set the onload handler
-    xhr.onload = function () {
-        if (xhr.status >= 200 && xhr.status < 300) {
-            // Request was successful
-            console.log('Success:', xhr.responseText);
-            showTicket();
-        } else {
-            // Request failed
-            console.error('Request failed with status:', xhr.status);
+    xhr.open('POST', '/bookShow', true);
+
+// Set the onload handler
+xhr.onload = function () {
+    if (xhr.status >= 200 && xhr.status < 300) {
+        // Request was successful
+        console.log('Success:', xhr.responseText);
+        showTicket();
+    } else {
+        // Request failed
+        console.error('Request failed with status:', xhr.status);
+        if (xhr.status === 400) {
+            // Not enough seats available
+            alert('Not enough seats available. Please check ticket amount.');
         }
-    };
+    }
+};
 
     // Set the onerror handler
     xhr.onerror = function () {
