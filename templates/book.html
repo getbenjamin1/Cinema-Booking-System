@@ -279,7 +279,7 @@
             {% for show in shows %}
                 <div class="show">
                     <div class="show-details">
-                        <h2>{{ movie.Name }} - Show {{ show.Show_ID }}</h2>
+                        <h2>{{ movie.Name }} - Show {{ show.Show_ID }}<br>Tickets: €5</h2>
                         <p>Date: {{ show.Show_Date }}, Time: {{ show.Show_Time }}</p>
                         <p>Screen ID: {{ show.Screen_ID }}, Seats Remaining: {{ show.Seats_Remaining }}</p>
                     
@@ -293,8 +293,10 @@
     </div>
 
     <div class="booking-form" id="bookingForm" style="display: none;">
+        <label for="Total_Price"></label>
+        <span id="totalPriceDisplay"></span>
         <label for="No_of_Tickets">Number of Tickets:</label>
-        <input type="number" id="No_of_Tickets" value="1">
+        <input type="number" id="No_of_Tickets" value="">
 
         <label for="Name_on_card">Name on Card:</label>
         <input type="text" id="Name_on_card" placeholder="John Doe">
@@ -318,6 +320,31 @@
     </footer>
 
     <script>
+    var timeoutId; // Variable to store the timeout ID
+
+function updateTotalPriceDelayed() {
+    // Clear previous timeout
+    clearTimeout(timeoutId);
+
+    // Set new timeout to execute updateTotalPrice() after 750ms
+    timeoutId = setTimeout(updateTotalPrice, 750);
+}
+
+function updateTotalPrice() {
+    // Get the value of the number of tickets input field
+    var numberOfTickets = parseInt(document.getElementById('No_of_Tickets').value);
+
+    // Calculate the total price (assuming 5 euros per ticket)
+    var totalPrice = numberOfTickets * 5;
+
+    // Display the total price
+    var totalPriceDisplay = document.getElementById('totalPriceDisplay');
+    totalPriceDisplay.textContent = 'Total Price: €' + totalPrice;
+}
+
+
+// Add an event listener to the number of tickets input field
+document.getElementById('No_of_Tickets').addEventListener('input', updateTotalPriceDelayed);
     var currentURL = window.location.href;
 
     var match = currentURL.match(/\/book\/(\d+)/);
@@ -379,13 +406,55 @@ function selectShow(showID) {
 function submitBooking() {
     // Gather data from form fields
     var Show_ID = document.getElementById('Show_ID').value;
-    var Amount = document.getElementById('No_of_Tickets').value;
+    var Amount = parseInt(document.getElementById('No_of_Tickets').value); // Parse the value as integer
+
+    // Validate card number
+    var Card_Number = document.getElementById('Card_Number').value;
+    if (!/^\d{16}$/.test(Card_Number)) {
+        alert('Please enter a valid 16-digit card number.');
+        return; // Exit function if card number is invalid
+    }
+
+    // Validate expiry date
+    var Expiration_Date = document.getElementById('Expiration_Date').value;
+    var expDateRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+    if (!expDateRegex.test(Expiration_Date)) {
+        alert('Please enter a valid expiry date in the format MM/YY.');
+        return; // Exit function if expiry date is invalid
+    }
+
+    // Parse expiry month and year
+    var expMonth = parseInt(Expiration_Date.split('/')[0], 10);
+    var expYear = parseInt('20' + Expiration_Date.split('/')[1], 10);
+
+    // Validate expiry month range
+    if (expMonth < 1 || expMonth > 12) {
+        alert('Please enter a valid month (between 1 and 12).');
+        return; // Exit function if month is invalid
+    }
+
+    // Check if number of tickets is a valid number
+    if (isNaN(Amount) || Amount <= 0) {
+        alert('Please enter a valid number of tickets.');
+        return; // Exit function if number of tickets is invalid
+    }
+
+    // Calculate total price
+    var totalPrice = Amount * 5; // Assuming each ticket costs €5
+
+    // Display total price
+    var totalPriceDisplay = document.getElementById('totalPriceDisplay');
+    if (!isNaN(totalPrice)) {
+        totalPriceDisplay.textContent = 'Total Price: €' + totalPrice;
+    } else {
+        totalPriceDisplay.textContent = ''; // Hide price if NaN
+    }
 
     // Create a new FormData object
     var formData = new FormData();
     // Append Show_ID to the FormData object
     formData.append('Show_ID', Show_ID);
-    formData.append('No_of_Tickets', Amount)
+    formData.append('No_of_Tickets', Amount);
 
     // Create a new XMLHttpRequest object
     var xhr = new XMLHttpRequest();

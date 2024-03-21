@@ -164,15 +164,21 @@ def book_show():
     return new_booking_id, 200
 
 
+from flask import render_template
+import datetime
+
 @app.route('/admin/report')
+
 def weekly_report():
+    r = ensureAuth()
+    if r is not None:
+        return r
     # Read the contents of the weekly report file
     with open("weekly_report.txt", "r") as file:
         report_data = file.readlines()
 
-    # Initialize dictionaries to store show counts and daily ticket counts
+    # Initialize dictionary to store show counts
     show_counts = {}
-    daily_counts = {}
 
     # Initialize variable to store total weekly tickets sold
     total_tickets_sold = 0
@@ -194,19 +200,12 @@ def weekly_report():
         show_counts.setdefault(movie_name, 0)
         show_counts[movie_name] += tickets
 
-        # Create a day-by-day breakdown of shows
-        while start_date <= end_date:
-            date_str = start_date.strftime("%Y-%m-%d")
-            daily_counts.setdefault(date_str, {})
-            daily_counts[date_str].setdefault(movie_name, 0)
-            daily_counts[date_str][movie_name] += tickets
-            start_date += datetime.timedelta(days=1)
-
         # Increment the total tickets sold only once per ticket sold
         total_tickets_sold += tickets
 
     # Render a template with the parsed data
-    return render_template('weekly_report.html', show_counts=show_counts, daily_counts=daily_counts, total_tickets_sold=total_tickets_sold)
+    return render_template('weekly_report.html', show_counts=show_counts, total_tickets_sold=total_tickets_sold)
+
 
 @app.route('/admin/management', methods=['GET', 'POST'])
 def test():
