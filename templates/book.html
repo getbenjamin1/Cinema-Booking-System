@@ -330,9 +330,18 @@ function updateTotalPriceDelayed() {
     timeoutId = setTimeout(updateTotalPrice, 750);
 }
 
+
 function updateTotalPrice() {
     // Get the value of the number of tickets input field
     var numberOfTickets = parseInt(document.getElementById('No_of_Tickets').value);
+
+    // Check if numberOfTickets is NaN or less than 0
+    if (isNaN(numberOfTickets) || numberOfTickets < 0) {
+        // If NaN or negative, hide the total price display
+        var totalPriceDisplay = document.getElementById('totalPriceDisplay');
+        totalPriceDisplay.textContent = '';
+        return; // Exit the function early
+    }
 
     // Calculate the total price (assuming 5 euros per ticket)
     var totalPrice = numberOfTickets * 5;
@@ -458,9 +467,6 @@ function submitBooking() {
 
     // Create a new XMLHttpRequest object
     var xhr = new XMLHttpRequest();
-
-    // Configure the POST request
-    xhr.open('POST', '/bookShow', true);
 
     xhr.open('POST', '/bookShow', true);
 
