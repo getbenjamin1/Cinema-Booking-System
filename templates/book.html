@@ -279,7 +279,7 @@
             {% for show in shows %}
                 <div class="show">
                     <div class="show-details">
-                        <h2>{{ movie.Name }} - Show {{ show.Show_ID }}</h2>
+                        <h2>{{ movie.Name }} - Show {{ show.Show_ID }}<br>Tickets: €5</h2>
                         <p>Date: {{ show.Show_Date }}, Time: {{ show.Show_Time }}</p>
                         <p>Screen ID: {{ show.Screen_ID }}, Seats Remaining: {{ show.Seats_Remaining }}</p>
                     
@@ -293,8 +293,10 @@
     </div>
 
     <div class="booking-form" id="bookingForm" style="display: none;">
+        <label for="Total_Price"></label>
+        <span id="totalPriceDisplay"></span>
         <label for="No_of_Tickets">Number of Tickets:</label>
-        <input type="number" id="No_of_Tickets" value="1">
+        <input type="number" id="No_of_Tickets" value="">
 
         <label for="Name_on_card">Name on Card:</label>
         <input type="text" id="Name_on_card" placeholder="John Doe">
@@ -318,6 +320,31 @@
     </footer>
 
     <script>
+    var timeoutId; // Variable to store the timeout ID
+
+function updateTotalPriceDelayed() {
+    // Clear previous timeout
+    clearTimeout(timeoutId);
+
+    // Set new timeout to execute updateTotalPrice() after 750ms
+    timeoutId = setTimeout(updateTotalPrice, 750);
+}
+
+function updateTotalPrice() {
+    // Get the value of the number of tickets input field
+    var numberOfTickets = parseInt(document.getElementById('No_of_Tickets').value);
+
+    // Calculate the total price (assuming 5 euros per ticket)
+    var totalPrice = numberOfTickets * 5;
+
+    // Display the total price
+    var totalPriceDisplay = document.getElementById('totalPriceDisplay');
+    totalPriceDisplay.textContent = 'Total Price: €' + totalPrice;
+}
+
+
+// Add an event listener to the number of tickets input field
+document.getElementById('No_of_Tickets').addEventListener('input', updateTotalPriceDelayed);
     var currentURL = window.location.href;
 
     var match = currentURL.match(/\/book\/(\d+)/);
@@ -379,7 +406,14 @@ function selectShow(showID) {
 function submitBooking() {
     // Gather data from form fields
     var Show_ID = document.getElementById('Show_ID').value;
-    var Amount = document.getElementById('No_of_Tickets').value;
+    var Amount = parseInt(document.getElementById('No_of_Tickets').value); // Parse the value as integer
+
+    // Calculate total price
+    var totalPrice = Amount * 5; // Assuming each ticket costs $5
+
+    // Display total price
+    var totalPriceDisplay = document.getElementById('totalPriceDisplay');
+    totalPriceDisplay.textContent = '$' + totalPrice; // Assuming currency is USD
 
     // Create a new FormData object
     var formData = new FormData();
@@ -413,6 +447,7 @@ function submitBooking() {
     // Send the FormData object as the request body
     xhr.send(formData);
 }
+
 
 
         function chargeCard() {
