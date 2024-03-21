@@ -14,6 +14,4 @@ client side regex checks on booking and around other pages
 
 
 create show - movie names
-showing ticket type (edited)
-and possible total price beside book now
-error checking
+showing ticket type (edit
