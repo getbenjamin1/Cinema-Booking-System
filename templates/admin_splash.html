@@ -55,16 +55,23 @@
             color: black; /* Set the color for hover and active links */
         }
 
-        /* Add border to Edit Movies */
-        .box:nth-child(1),
-        .box:nth-child(3) {
-            border: 2px solid black;
-        }
+        /* Add this style to apply border to all boxes */
+    .box {
+    border: 2px solid black; /* Add this line to apply border to all boxes */
+}
+.back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
 
-        /* Add border to Edit Shows */
-        .box:nth-child(2) {
-            border: 2px solid black;
-        }
 
         /* Style for the Weekly Report link */
         .weekly-report {
@@ -90,7 +97,14 @@
             <span style="font-size: 2.5em;">Screens&<br>Showings</span>
         </a>
         <!-- Weekly Report link -->
-        <a href="/admin/report" class="weekly-report">Weekly Report</a>
+        <a href="/admin/report" class="box"  style="color: blue;">
+            <span style="font-size: 2.5em;">Weekly Report</span>
+        </a>
+
+        <a href="/admin/report" class="box"  style="color: blue;">
+            <span style="font-size: 2.5em;">Manage Users</span>
+        </a>
+        <a class="back-btn" href="/">Back to Home Page</a>
     </div>
 </body>
 </html>
