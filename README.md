@@ -26,7 +26,7 @@ python3 -m ensurepip
 pip install -r requirements.txt
 ```
 
-Do not to forget to install QRcode:
+Do not forget to install QRcode:
 ```
 pip3 install qrcode
 ```

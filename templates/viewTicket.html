@@ -3,14 +3,111 @@
 <head>
     <title>Debianem Cinema</title>
     <style>
-        body {
+          body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background: linear-gradient(#3498db, #1abc9c); /*added background colour*/
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        
+        header {
+            background-color: #152238;
+            color: #fff;
+            padding: 1em 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        header img {
+            max-width: 100px;
+            margin-right: 10px;
+        }
+            
+        header h1 {
+            font-family: 'Klavia';
+            margin: 0;
+        }
+        #logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /*margin-bottom: 20px;*/
+            flex-grow: 1; /* Ensures it takes up the maximum available space */
             text-align: center;
         }
-        .header {
-            background-color: blue;
-            color: white;
-            padding: 10px;
+
+        footer {
+            background-color: #152238;
+            color: #fff;
+            text-align: center;
+            padding: 1em 0;
+            width: 100%; /* Ensure footer spans the full width */
+            z-index: 1000; /* Set higher z-index to make sure it's above other content */
+            font-family: 'Klavia';
+            position: fixed; /* Fix footer at the bottom */
+            bottom: 0; /* Position it at the bottom of the container */
+
+
         }
+        footer a {
+            color: #fff; /* Set the text color to white */
+            text-decoration: none; /* Remove the default underline for links */
+        }
+
+        .button {
+            margin-left: 1em; /* Adjust as necessary for spacing from the left edge */
+            margin-right: auto; /* Pushes everything else to the right */
+        }
+        
+        button, .booking-form button {
+            background-color: #152238;
+            color: #fff;
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            /*margin-left: 15px;*/
+        }
+
+        button:hover, .booking-form button:hover {
+            background-color: #fff;
+            color: #152238;
+            transform: scale(1.05);
+            transition: transform 0.5s;
+        }
+
+        h1 {
+            /* color: #333; */
+            text-align: center;
+        }
+
+
+
+
+
+
+
+
+        header {
+            background-color: #152238;
+            color: #fff;
+            padding: 1em 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+       
         .home-button {
             position: absolute;
             top: 10px;
@@ -37,14 +134,24 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Debianem Cinema</h1>
-    </div>
-    <button class="home-button" onclick="window.location.href='/'">Return to Homepage</button>
+    <header>
+        <button class="button" onclick="window.location = '/'">Back</button>
+        <div id="logo-section">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Debianem Cinema Logo">
+            </a>
+            <h1>Debianem Cinema</h1>
+        </div>
+    </header>
+    <h1>Your Ticket</h1>
     <img class="ticket-image" src="data:image/png;base64,{{ image_data }}" alt="Ticket Image">
     <div class="instructions">PLEASE SAVE AND SHOW TO CASHIER.</div>
     <a href="data:image/png;base64,{{ image_data }}" download="ticket.png">
-        <button class="download-button">Download Ticket</button>
+        <button class="button">Download Ticket</button>
     </a>
+    
 </body>
+<footer>
+    <a href="{{ url_for('index') }}">&copy; 2024 Debianem Cinema</a>
+</footer> 
 </html>

@@ -90,21 +90,82 @@
             text-align: center;
         }
 
-        .show-container {
-            max-width: 800px;
+/*        .show-container {
+            /*width: 100%; 
+            display: flex;
+            flex-wrap: wrap;
             margin: 20px auto auto;
-        }
-
-        .show {
-            position: relative;
+            justify-content: flex-start; 
+            gap: 20px; 
+            align-items: flex-start;
+            padding-left: 5%;
+        } 
+        .show-container {
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: flex-start;
+            width: 60%;
+            max-width: 1200px; 
+            margin: auto auto 10% auto;
+        }*/
+        
+/*        .show {
+            /*position: relative;*/
+            /*width: calc(33.333% - 40px); /* Subtract the total margin from the width */
+       /*     flex: 0 0 calc((100% / 3) - (70px + 20px));*/
+ /*           flex: 1 1 calc(33.333% - 20px); 
+            margin: 10px ;
             margin-bottom: 20px;
             padding: 15px;
             background-color: #152238;
             color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
-        }
+            box-sizing: border-box;
+            min-width: 250px;
+            max-width: 400px;
+        } 
 
+        .show {
+           flex: 1 0 calc(33.333% - 20px); 
+            box-sizing: border-box;
+            margin-bottom: 20px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center; t
+            justify-content: center;
+        }*/
+
+        .show-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center; /* Centers shows in the row */
+            margin: 5% auto auto auto; /* Centers show-container */
+            max-width: 1200px; /* Adjust as needed */
+            padding-bottom:20px;
+        }
+        
+        .show {
+            flex: 1 0 calc(33.333% - 20px); /* Adjust the percentage to account for the gap */
+            margin: auto; /* Ensures even one show is centered */
+            display: flex;
+            flex-direction: column;
+            max-width: 400px; /* Ensures that the width of the shows does not exceed 400px */
+            box-sizing: border-box;
+            padding: 15px;
+            background-color: #152238;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        
+        /* Add this to create a pseudo-element that acts like a flex item */
+        .show-container::after {
+            content: '';
+            padding-bottom:20px;
+        }
         .show h2 {
             color: linear-gradient(#3498db, #1abc9c);
             margin-bottom: 10px;
@@ -115,13 +176,60 @@
             margin-bottom: 10px;
         }
 
-        .booking-form {
-            /* max-width: 400px;
-            margin: 20px auto;
+        /* For smaller screens, fit two shows per line */
+    /*    @media screen and (max-width: 1200px) {
+            .show {
+                width: calc(50% - 20px); 
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .show {
+                width: calc(100% - 20px); 
+            }
+        } /* For mobile screens, fit one show per line */
+
+ /*       @media (max-width: 1200px) {
+            .show {
+                /*flex-basis: calc(50% - 40px); /* Two shows per line on smaller screens */
+   /*               flex: 1 1 calc(50% - 20px);
+                max-width: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .show {
+                flex: 1 1 80%; 
+                margin: auto;
+            }
+        } */
+       
+        @media (max-width: 1200px) {
+            .show {
+                flex: 1 0 calc(50% - 20px);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .show {
+                flex: 1 0 100%;
+            }
+        }
+
+        .show-details, .booking-form {
             padding: 15px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px; */
+            box-sizing: border-box;
+        }
+        .show-details {
+            background-color: #152238;  
+            color: #fff;
+        }
+        .booking-form {
+            background-color: #152238;
+            color: #fff;
+            display: none; /* hidden by default */
+        }
+ /*       .booking-form {
             position: relative;
             margin-bottom: 20px;
             padding: 15px;
@@ -132,7 +240,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
 
-        }
+        }*/
 
         .booking-form label {
             display: block;
@@ -147,9 +255,9 @@
             box-sizing: border-box;
         }
         .selected-show-button {
-    background-color: #4CAF50; /* Green background to indicate selection */
-    cursor: default; /* Change cursor to default to indicate it's not clickable */
-}
+            background-color: #4CAF50; /* Green background to indicate selection */
+            cursor: default; /* Change cursor to default to indicate it's not clickable */
+        }
 
     </style>
 </head>
@@ -158,7 +266,7 @@
         <button class="button" onclick="window.history.back()">Back</button>
         <div id="logo-section">
             <a href="{{ url_for('index') }}">
-                <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Debianem Cinema Logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Debianem Cinema Logo">
             </a>
             <h1>Debianem Cinema</h1>
         </div>
@@ -170,10 +278,13 @@
         {% if shows %}
             {% for show in shows %}
                 <div class="show">
-                    <h2>{{ movie.Name }} - Show {{ show.Show_ID }}</h2>
-                    <p>Date: {{ show.Show_Date }}, Time: {{ show.Show_Time }}</p>
-                    <p>Screen ID: {{ show.Screen_ID }}, Seats Remaining: {{ show.Seats_Remaining }}</p>
-                    <button onclick="selectShow('{{ show.Show_ID }}')" class="button" >Select Show</button>
+                    <div class="show-details">
+                        <h2>{{ movie.Name }} - Show {{ show.Show_ID }}</h2>
+                        <p>Date: {{ show.Show_Date }}, Time: {{ show.Show_Time }}</p>
+                        <p>Screen ID: {{ show.Screen_ID }}, Seats Remaining: {{ show.Seats_Remaining }}</p>
+                    
+                        <button onclick="selectShow('{{ show.Show_ID }}')" class="button" >Select Show</button>
+                    </div>
                 </div>
             {% endfor %}
         {% else %}
@@ -263,7 +374,7 @@ function selectShow(showID) {
 
     // Update the hidden Show_ID input field with the selected show ID
     document.getElementById('Show_ID').value = showID;   
-}
+} 
 
 function submitBooking() {
     // Gather data from form fields
