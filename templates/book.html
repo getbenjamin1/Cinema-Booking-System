@@ -408,18 +408,53 @@ function submitBooking() {
     var Show_ID = document.getElementById('Show_ID').value;
     var Amount = parseInt(document.getElementById('No_of_Tickets').value); // Parse the value as integer
 
+    // Validate card number
+    var Card_Number = document.getElementById('Card_Number').value;
+    if (!/^\d{16}$/.test(Card_Number)) {
+        alert('Please enter a valid 16-digit card number.');
+        return; // Exit function if card number is invalid
+    }
+
+    // Validate expiry date
+    var Expiration_Date = document.getElementById('Expiration_Date').value;
+    var expDateRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+    if (!expDateRegex.test(Expiration_Date)) {
+        alert('Please enter a valid expiry date in the format MM/YY.');
+        return; // Exit function if expiry date is invalid
+    }
+
+    // Parse expiry month and year
+    var expMonth = parseInt(Expiration_Date.split('/')[0], 10);
+    var expYear = parseInt('20' + Expiration_Date.split('/')[1], 10);
+
+    // Validate expiry month range
+    if (expMonth < 1 || expMonth > 12) {
+        alert('Please enter a valid month (between 1 and 12).');
+        return; // Exit function if month is invalid
+    }
+
+    // Check if number of tickets is a valid number
+    if (isNaN(Amount) || Amount <= 0) {
+        alert('Please enter a valid number of tickets.');
+        return; // Exit function if number of tickets is invalid
+    }
+
     // Calculate total price
-    var totalPrice = Amount * 5; // Assuming each ticket costs $5
+    var totalPrice = Amount * 5; // Assuming each ticket costs €5
 
     // Display total price
     var totalPriceDisplay = document.getElementById('totalPriceDisplay');
-    totalPriceDisplay.textContent = '$' + totalPrice; // Assuming currency is USD
+    if (!isNaN(totalPrice)) {
+        totalPriceDisplay.textContent = 'Total Price: €' + totalPrice;
+    } else {
+        totalPriceDisplay.textContent = ''; // Hide price if NaN
+    }
 
     // Create a new FormData object
     var formData = new FormData();
     // Append Show_ID to the FormData object
     formData.append('Show_ID', Show_ID);
-    formData.append('No_of_Tickets', Amount)
+    formData.append('No_of_Tickets', Amount);
 
     // Create a new XMLHttpRequest object
     var xhr = new XMLHttpRequest();
@@ -447,7 +482,6 @@ function submitBooking() {
     // Send the FormData object as the request body
     xhr.send(formData);
 }
-
 
 
         function chargeCard() {
