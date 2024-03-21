@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            color: #007bff;
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .smaller-text {
+            font-size: 14px;
+            text-align: center;
+            color: #666;
+        }
+
+        .back-btn {
+            display: block;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Weekly Report</h1>
+
+    <a class="back-btn" href="/admin">Back</a>
+
+    <h2>Tickets Sold This Week</h2>
+    <ul>
+        {% for movie_name, count in show_counts.items() %}
+            <li>
+                {{ movie_name }}:
+                <br>
+                <span class="smaller-text">{{count}} ticket(s)</span>
+            </li>
+        {% endfor %}
+    </ul>
+    
+    <br>
+
+    <p>Total Weekly Tickets Sold: {{ total_tickets_sold }}</p>
+
+    <br>
+
+    {% set gross_profit = total_tickets_sold * 5 %}
+    <p>Gross Profit: €{{ gross_profit }}</p>
+</body>
+</html>

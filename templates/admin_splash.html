@@ -56,13 +56,28 @@
         }
 
         /* Add border to Edit Movies */
-        .box:nth-child(1) {
+        .box:nth-child(1),
+        .box:nth-child(3) {
             border: 2px solid black;
         }
 
         /* Add border to Edit Shows */
         .box:nth-child(2) {
             border: 2px solid black;
+        }
+
+        /* Style for the Weekly Report link */
+        .weekly-report {
+            margin-left: 20px; /* Adjust margin to move it to the right */
+            font-size: 2.5em;
+            text-decoration: none;
+            color: blue;
+            display: inline-block; /* Display as inline-block to align properly */
+            border: 2px solid black; /* Add border */
+            padding: 15px; /* Adjust padding */
+            width: 200px; /* Adjust width */
+            height: 200px;
+            background-color: white;
         }
     </style>
 </head>
@@ -74,7 +89,8 @@
         <a href="/admin/management" class="box" style="color: blue;">
             <span style="font-size: 2.5em;">Screens&<br>Showings</span>
         </a>
-        
+        <!-- Weekly Report link -->
+        <a href="/admin/report" class="weekly-report">Weekly Report</a>
     </div>
 </body>
 </html>

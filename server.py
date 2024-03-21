@@ -8,6 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import qrcode
 from io import BytesIO
 import base64
+import datetime
 
 admin_pw = "homersimpson99"
 app = Flask(__name__)
@@ -100,6 +101,22 @@ def view_ticket():
 
     return render_template('viewTicket.html', image_data=image_data)
 
+def addToWeeklyReport(Show_ID, No_of_Tickets):
+    # Get current date
+    current_date = datetime.datetime.now()
+    # Calculate the start of the current week (assuming Monday is the start of the week)
+    start_of_week = current_date - datetime.timedelta(days=current_date.weekday())
+    # Calculate the end of the current week
+    end_of_week = start_of_week + datetime.timedelta(days=6)
+    # Format the start and end dates
+    start_of_week_str = start_of_week.strftime("%Y-%m-%d")
+    end_of_week_str = end_of_week.strftime("%Y-%m-%d")
+
+    # Create or open the file in append mode
+    with open("weekly_report.txt", "a") as file:
+        # Write the data to the file
+        file.write(f"Show_ID: {Show_ID}, No_of_Tickets: {No_of_Tickets}, Week: {start_of_week_str} to {end_of_week_str}\n")
+
 @app.route('/admin/bookings')
 def admin_bookings():
     r = ensureAuth()
@@ -142,8 +159,54 @@ def book_show():
     db.session.add(booking)
     db.session.commit()
     subtractSeat(Show_ID, No_of_Tickets)
+    addToWeeklyReport(Show_ID, No_of_Tickets)
 
     return new_booking_id, 200
+
+
+@app.route('/admin/report')
+def weekly_report():
+    # Read the contents of the weekly report file
+    with open("weekly_report.txt", "r") as file:
+        report_data = file.readlines()
+
+    # Initialize dictionaries to store show counts and daily ticket counts
+    show_counts = {}
+    daily_counts = {}
+
+    # Initialize variable to store total weekly tickets sold
+    total_tickets_sold = 0
+
+    # Parse the report data
+    for line in report_data:
+        parts = line.strip().split(", ")
+        show_id = parts[0].split(": ")[1]
+        tickets = int(parts[1].split(": ")[1])
+        date_range = parts[2].split(": ")[1].split(" to ")
+        start_date = datetime.datetime.strptime(date_range[0], "%Y-%m-%d")
+        end_date = datetime.datetime.strptime(date_range[1], "%Y-%m-%d")
+
+        # Fetch movie name from the Show table
+        show = Show.query.get(show_id)
+        movie_name = show.movie.Name
+
+        # Aggregate ticket counts for each show
+        show_counts.setdefault(movie_name, 0)
+        show_counts[movie_name] += tickets
+
+        # Create a day-by-day breakdown of shows
+        while start_date <= end_date:
+            date_str = start_date.strftime("%Y-%m-%d")
+            daily_counts.setdefault(date_str, {})
+            daily_counts[date_str].setdefault(movie_name, 0)
+            daily_counts[date_str][movie_name] += tickets
+            start_date += datetime.timedelta(days=1)
+
+        # Increment the total tickets sold only once per ticket sold
+        total_tickets_sold += tickets
+
+    # Render a template with the parsed data
+    return render_template('weekly_report.html', show_counts=show_counts, daily_counts=daily_counts, total_tickets_sold=total_tickets_sold)
 
 @app.route('/admin/management', methods=['GET', 'POST'])
 def test():

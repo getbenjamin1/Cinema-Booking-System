@@ -9,3 +9,8 @@ newsletter report on seats
 ( use this data in database to generate report)
 
 little beauty fixes
+only show shows that are now or in future on booking page
+only show what is currently showing on homepage add showing nothing
+add isAdmin to web_users boolean Y N
+add user management
+adapt admin.html auth to use isAdmin boolean from db for authentication
