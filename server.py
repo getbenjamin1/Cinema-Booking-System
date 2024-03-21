@@ -75,10 +75,18 @@ def getScreens():
     screens = Screen.query.all()
     return screens
 
-def subtractSeat(sID, n):
-    show = Show.query.get(sID)
-    show.Seats_Remaining -= int(n)
-    db.session.commit()
+def subtractSeat(show_id, no_of_tickets):
+    show = Show.query.get(show_id)
+    if show:
+        if show.Seats_Remaining >= no_of_tickets:
+            show.Seats_Remaining -= no_of_tickets
+            db.session.commit()
+            return True
+        else:
+            return False
+    else:
+        return False
+
 
 @app.route('/viewTicket', methods=['POST'])
 def view_ticket():
@@ -134,38 +142,39 @@ def book(Movie_ID):
 @app.route('/bookShow', methods=['POST'])
 def book_show():
     print(request.form)
-    Show_ID = request.form.get('Show_ID')
-    latest_booking = db.session.query(db.func.max(Booking.Booking_ID)).scalar()
-    latest_booking = int(latest_booking[1:]) if latest_booking else 0
-    new_booking_id = 'B' + str(latest_booking + 1).zfill(3)
-    Booking_ID = request.form.get('Booking_ID', new_booking_id)
-    No_of_Tickets = request.form.get('No_of_Tickets', 1)
-    Total_Cost = request.form.get('Total_Cost', 5)
-    Card_Number = request.form.get('Card_Number', '4638123456789101')
-    Name_on_card = request.form.get('Name_on_card', 'john doe')
-    User_ID = request.form.get('User_ID', 'U001')
-    Email_ID = request.form.get('Email_ID', 'bla@bla.bla')
+    show_id = request.form.get('Show_ID')
+    no_of_tickets = int(request.form.get('No_of_Tickets', 1))
 
-    booking = Booking(
-        Booking_ID=Booking_ID,
-        No_of_Tickets=int(No_of_Tickets),
-        Total_Cost=int(Total_Cost),
-        Card_Number=Card_Number,
-        Name_on_card=Name_on_card,
-        User_ID=User_ID,
-        Show_ID=Show_ID,
-        Email_ID=Email_ID
-    )
-    db.session.add(booking)
-    db.session.commit()
-    subtractSeat(Show_ID, No_of_Tickets)
-    addToWeeklyReport(Show_ID, No_of_Tickets)
+    if subtractSeat(show_id, no_of_tickets):
+        # Proceed with booking
+        latest_booking = db.session.query(db.func.max(Booking.Booking_ID)).scalar()
+        latest_booking = int(latest_booking[1:]) if latest_booking else 0
+        new_booking_id = 'B' + str(latest_booking + 1).zfill(3)
+        booking_id = request.form.get('Booking_ID', new_booking_id)
+        total_cost = request.form.get('Total_Cost', 5)
+        card_number = request.form.get('Card_Number', '4638123456789101')
+        name_on_card = request.form.get('Name_on_card', 'john doe')
+        user_id = request.form.get('User_ID', 'U001')
+        email_id = request.form.get('Email_ID', 'bla@bla.bla')
 
-    return new_booking_id, 200
+        booking = Booking(
+            Booking_ID=booking_id,
+            No_of_Tickets=int(no_of_tickets),
+            Total_Cost=int(total_cost),
+            Card_Number=card_number,
+            Name_on_card=name_on_card,
+            User_ID=user_id,
+            Show_ID=show_id,
+            Email_ID=email_id
+        )
+        db.session.add(booking)
+        db.session.commit()
+        addToWeeklyReport(show_id, no_of_tickets)
 
+        return new_booking_id, 200
+    else:
+        return "Not enough available seats", 400
 
-from flask import render_template
-import datetime
 
 @app.route('/admin/report')
 
