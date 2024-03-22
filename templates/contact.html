@@ -7,8 +7,8 @@
     <title>Contact Us - Debianem Cinema</title>
     <style>
         body {
-            /* font-family: Arial, sans-serif; */
-            font-family: 'Inter', sans-serif;
+            font-family: Arial, sans-serif; 
+            /*font-family: 'Inter', sans-serif; */ /* Changed font-family  to see differences */
             margin: 0;
             padding: 0;
             overflow-x: hidden;
@@ -17,6 +17,7 @@
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
+            font-weight: 200;
         }
         .clearfix::after {
             content: "";
@@ -40,6 +41,7 @@
         header h1 {
             font-family: 'Chizel';
             margin: 0;
+            font-weight: 200;
         }
         #logo-section {
             display: flex;
@@ -68,6 +70,9 @@
         h2 {
             color: #fff;
             width: 100%;
+            font-family: 'Inter', sans-serif;
+            font-weight: 200;
+            font-size: 2em;
         }
 
        
@@ -238,24 +243,33 @@
         textarea {
             width: 100%;
             padding: 10px;
-            margin: 5px 0;
+            margin: 5px 0 8px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
         }
 
         input[type="submit"] {
-            background-color: #fff;
+            /*background-color: #fff;
             color: #152238;
             border: none;
             padding: 10px 20px;
             cursor: pointer;
             border-radius: 5px;
+            */
+            background-color: #152238;
+            color: #fff;
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid #fff;
+            border-radius: 5px;
         }
 
         input[type="submit"]:hover {
             background-color: green;
-            color: #fff;
+            color: #152238;
+            transform: scale(1.05);
+            transition: transform 0.5s;
         }
 
     </style>
@@ -284,7 +298,7 @@
  <div class="container">
     <div class="card1">
         <div class="card-content"> 
-            <h3 class="card-title">Contact Us</h3>
+            <h2 class="card-title">Contact Us</h2>
             <p>
                 Debianem Cinema<br>
                 123 Movie Street<br>
@@ -297,7 +311,7 @@
             </p>
         </div>
         <section id="location">
-            <h2>Find Us</h2>
+            <h2 class="card-title">Find Us</h2>
             <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2291.1900414805787!2d-7.7235147!3d54.9522271!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x485feb3a7ad0d89d%3A0x27a83f5f5684fd0e!2sAtlantic%20Technological%20University%20-%20Donegal%20Letterkenny%20Campus!5e0!3m2!1sen!2sie!4v1710532976715!5m2!1sen!2sie" width="280" height="150" style="border:1;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </section>
     </div> 
@@ -306,7 +320,7 @@
 <div class="container">  -->
     <div class="card">
         <div class="card-content">
-            <h3 class="card-title">Contact Form</h3>
+            <h2 class="card-title">Contact Form</h2>
             <form id="contact-form">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" required>
