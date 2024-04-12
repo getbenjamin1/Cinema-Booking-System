@@ -183,7 +183,10 @@
         }
 
         .button {
-            /*margin-left: 1em; /* Adjust as necessary for spacing from the left edge */
+            margin-left: 1em; /* Adjust as necessary for spacing from the left edge */
+            margin-right: auto; /* Pushes everything else to the right */
+        }
+        .des, .button {
             margin-right: auto; /* Pushes everything else to the right */
         }
         
@@ -253,11 +256,8 @@
         <div class="description-trailer">
             <div class="description">
                 <p><strong><h3>Description:</h3></strong> {{ movie.Description }}</p>
-                <button class="button" onclick="bookTicket()">Book Now</button>
+                <button class= "des" class="button" onclick="bookTicket()">Book Now</button>
             </div>
-          <!--  <div class="trailer">
-                <iframe width="500" height="315" src="{{ movie.Trailer }}" frameborder="0" allowfullscreen></iframe>
-            </div>-->
         </div>
     </div>
 
