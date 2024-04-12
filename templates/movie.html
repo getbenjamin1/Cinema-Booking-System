@@ -149,6 +149,20 @@
             margin: 0 0 10px; /* Add some bottom margin for spacing */
         }
 
+        .info-item {
+            margin-bottom: 10px;
+            display: flex;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            width: 80px; /* Adjust the width as needed */
+        }
+        
+        .info-value {
+            margin-left: 10px;
+        }
+
         .description-trailer {
             display: flex;
             justify-content: space-between; /* Space between description and trailer */
@@ -165,11 +179,11 @@
 
         .trailer {
             flex: 1; /* Take remaining space */
-            margin-left: 20px; /* Add some left margin for spacing */
+            margin-top: 30px;  /*Add some left margin for spacing */
         }
 
         .button {
-            margin-left: 1em; /* Adjust as necessary for spacing from the left edge */
+            /*margin-left: 1em; /* Adjust as necessary for spacing from the left edge */
             margin-right: auto; /* Pushes everything else to the right */
         }
         
@@ -209,16 +223,31 @@
         <div class="movie-details">
             <img src="{{ movie.Image }}" alt="{{ movie.Name }} Poster">
             <div class="movie-info">
-                <p><strong>Genre:</strong> {{ movie.Genre }}</p>
-                <p><strong>Duration:</strong> <span id="formattedDuration"></span></p>
-                <p><strong>Category:</strong> {{ movie.Category }}</p>
-                <p><strong>Language:</strong> {{ movie.Language }}</p>
-                <p><strong>Rating:</strong> {{ movie.Rating }}/10</p>
-                <br>
+                <div class="info-item">
+                    <span class="info-label">Genre:</span>
+                    <span class="info-value">{{ movie.Genre }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Duration:</span>
+                    <span class="info-value"><span id="formattedDuration"></span></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Category:</span>
+                    <span class="info-value">{{ movie.Category }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Language:</span>
+                    <span class="info-value">{{ movie.Language }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Rating:</span>
+                    <span class="info-value">{{ movie.Rating }}/10</span>
+                </div>
                 <div class="trailer">
                     <iframe width="450" height="215" src="{{ movie.Trailer }}" frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>
+            
         </div>
 
         <div class="description-trailer">
