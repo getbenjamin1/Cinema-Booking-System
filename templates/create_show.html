@@ -32,7 +32,8 @@
             color: #333;
         }
 
-        input {
+        input,
+        select {
             width: 100%;
             padding: 8px;
             margin-bottom: 10px;
@@ -54,8 +55,10 @@
 <body>
     <h1>Create Show</h1>
     <form method="POST" action="{{ url_for('create_show') }}">
-        <label for="movie_id">Movie ID:</label>
-        <input type="text" id="movie_id" name="movie_id" value="{{ new_id }}" required>
+        <label for="movie_name">Movie:</label>
+        <select id="movie_name" name="movie_id" required>
+            <!-- Options will be populated dynamically -->
+        </select>
 
         <label for="show_date">Show Date:</label>
         <input type="date" id="show_date" name="show_date" required>
@@ -71,5 +74,35 @@
 
         <input type="submit" value="Create Show">
     </form>
+
+    <script>
+        // Function to fetch movie details and populate the combobox
+        function populateMovieNames() {
+            for (let movieId = 1; movieId <= 20; movieId++) {
+                fetch(`/api/movie/${movieId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Invalid Movie ID');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Populate the combobox with movie names
+                        const movieName = data.Name;
+                        const option = document.createElement('option');
+                        option.text = movieName;
+                        option.value = movieId;
+                        document.getElementById('movie_name').appendChild(option);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Stop fetching if invalid movie ID encountered
+                    });
+            }
+        }
+
+        // Call the function to populate movie names when the page loads
+        window.onload = populateMovieNames;
+    </script>
 </body>
 </html>
