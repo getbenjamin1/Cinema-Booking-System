@@ -275,17 +275,17 @@
 
     <section>
         <div id="now-showing-section" class="movie-section" style="display: none;">
-          <div id="movies">
-          {% for screen_id in screen_ids %}
-                  {% for show in shows[screen_id] %}
-                      <div class="movie" onclick="showMovieDetails({{ show.Movie_ID }})">
-                          <img src="{{ show.movie.Image }}" alt="{{ show.movie.Name }}">
-                          <p>{{ show.movie.Name }}<br> <b>Screen {{ screen_id }}</b></p>
-                      </div>
-                  {% endfor %}
-            {% endfor %}
-         </div>
-    </div>
+            <div id="movies">
+                {% for screen_id in screen_ids %}
+                    {% if screen_id in shows %}
+                        <div class="movie" onclick="showMovieDetails({{ shows[screen_id].Movie_ID }})">
+                            <img src="{{ shows[screen_id].movie.Image }}" alt="{{ shows[screen_id].movie.Name }}">
+                            <p>{{ shows[screen_id].movie.Name }}<br> <b>Screen {{ screen_id }}</b></p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>            
           <div id="all-movies-section" class="movie-section">
               <!-- All Movies content will be dynamically populated here -->
               <div id="movies" class="all-movies-grid">

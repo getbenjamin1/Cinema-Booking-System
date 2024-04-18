@@ -428,10 +428,12 @@ def index():
     screen_ids = db.session.query(distinct(Show.Screen_ID)).all()
     screen_ids = [str(screen_id[0]) for screen_id in screen_ids]
 
-    # Fetch shows for each screen ID
+    # Fetch the first show for each screen ID
     shows = {}
     for screen_id in screen_ids:
-        shows[screen_id] = Show.query.filter_by(Screen_ID=screen_id).all()
+        show = Show.query.filter_by(Screen_ID=screen_id).first()
+        if show:  # Check if a show exists for the screen ID
+            shows[screen_id] = show
 
     return render_template('index.html', screen_ids=screen_ids, shows=shows)
 
