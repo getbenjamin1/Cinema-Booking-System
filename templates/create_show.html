@@ -50,6 +50,21 @@
             border-radius: 3px;
             cursor: pointer;
         }
+        .back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+.back-btn:hover {
+    background-color: #0056b3;
+}
     </style>
 </head>
 <body>
@@ -66,7 +81,7 @@
         <label for="screen_id">Screen ID:</label>
         <input type="text" id="screen_id" name="screen_id" required>
 
-        <label for="time">Show Time (format: 15:00:00):</label>
+        <label for="time">Show Time (format: 15:00):</label>
         <input type="text" id="time" name="time" required>
 
         <label for="seats_remaining">Seats Remaining:</label>
@@ -104,5 +119,6 @@
         // Call the function to populate movie names when the page loads
         window.onload = populateMovieNames;
     </script>
+    <a class="back-btn" href="/admin/management">Back</a>
 </body>
 </html>

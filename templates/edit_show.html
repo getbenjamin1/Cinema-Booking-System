@@ -49,6 +49,21 @@
             border-radius: 3px;
             cursor: pointer;
         }
+        .back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+.back-btn:hover {
+    background-color: #0056b3;
+}
     </style>
 </head>
 <body>
@@ -62,7 +77,7 @@
         <input type="text" id="show_date" name="show_date" value="{{ show.Show_Date }}" >
         <label for="time">Show Time (format: 15:00:00):</label>
         <input type="text" id="time" name="time" value="{{ show.Show_Time }}">
-        <label for="show_id" >Screen Number:</label>
+        <label for="show_id" >Screen ID:</label>
         <input type="text" id="show_id" name="show_id" value="{{ show.Show_ID }}" style="display:none">
         <input type="text" id="screen_id" name="screen_id" value="{{ show.Screen_ID }}">
         <label for="seats_remaining">Seats Remaining:</label>
@@ -99,5 +114,6 @@
         // Call the function to populate movie names when the page loads
         window.onload = populateMovieNames;
     </script>
+    <a class="back-btn" href="/admin/management">Back</a>
 </body>
 </html>

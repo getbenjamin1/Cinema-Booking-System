@@ -49,11 +49,26 @@
             border-radius: 3px;
             cursor: pointer;
         }
+        .back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+.back-btn:hover {
+    background-color: #0056b3;
+}
     </style>
 </head>
 <body>
     <h1>Create Movie</h1>
-    <form method="POST">
+    <form method="POST" onsubmit="return validateForm()">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name">
 
@@ -85,5 +100,25 @@
 
         <input type="submit" value="Create">
     </form>
+    <a class="back-btn" href="/admin/movies">Back</a>
 </body>
+<script>
+    function validateForm() {
+        var name = document.getElementById('name').value;
+        var genre = document.getElementById('genre').value;
+        var duration = document.getElementById('duration').value;
+        var image = document.getElementById('image').value;
+        var description = document.getElementById('description').value;
+        var category = document.getElementById('category').value;
+        var language = document.getElementById('language').value;
+        var rating = document.getElementById('rating').value;
+        var trailer = document.getElementById('trailer').value;
+
+        if (!name || !genre || !duration || !image || !description || !category || !language || !rating || !trailer) {
+            alert('Please fill all the fields.');
+            return false; // Prevent the form from submitting
+        }
+        return true; // Proceed with form submission
+    }
+</script>
 </html>
