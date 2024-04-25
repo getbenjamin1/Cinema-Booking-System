@@ -68,7 +68,7 @@
 </head>
 <body>
     <h1>Create Movie</h1>
-    <form method="POST" onsubmit="return validateForm()">
+    <form method="POST">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name">
 
@@ -103,22 +103,42 @@
     <a class="back-btn" href="/admin/movies">Back</a>
 </body>
 <script>
-    function validateForm() {
-        var name = document.getElementById('name').value;
-        var genre = document.getElementById('genre').value;
-        var duration = document.getElementById('duration').value;
-        var image = document.getElementById('image').value;
-        var description = document.getElementById('description').value;
-        var category = document.getElementById('category').value;
-        var language = document.getElementById('language').value;
-        var rating = document.getElementById('rating').value;
-        var trailer = document.getElementById('trailer').value;
-
-        if (!name || !genre || !duration || !image || !description || !category || !language || !rating || !trailer) {
-            alert('Please fill all the fields.');
-            return false; // Prevent the form from submitting
+document.querySelector('form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form from submitting initially
+    validateForm().then(isValid => {
+        if (isValid) {
+            event.target.submit();
         }
-        return true; // Proceed with form submission
+    });
+});
+
+async function validateForm() {
+    var name = document.getElementById('name').value;
+    var genre = document.getElementById('genre').value;
+    var duration = document.getElementById('duration').value;
+    var image = document.getElementById('image').value;
+    var description = document.getElementById('description').value;
+    var category = document.getElementById('category').value;
+    var language = document.getElementById('language').value;
+    var rating = document.getElementById('rating').value;
+    var trailer = document.getElementById('trailer').value;
+
+    if (!name || !genre || !duration || !image || !description || !category || !language || !rating || !trailer) {
+        alert('Please fill all the fields.');
+        return false;
     }
+
+    const response = await fetch(`/api/search?q=${name}`);
+    const data = await response.json();
+
+    for (let movie of data) {
+        if (movie.Name.toLowerCase() === name.toLowerCase()) {
+            alert('Duplicate Movie Name..');
+            return false;
+        }
+    }
+
+    return true; // Proceed with form submission
+}
 </script>
 </html>

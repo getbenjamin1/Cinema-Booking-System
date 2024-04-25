@@ -75,7 +75,7 @@
         </select>
         <label for="show_date">Show Date:</label>
         <input type="text" id="show_date" name="show_date" value="{{ show.Show_Date }}" >
-        <label for="time">Show Time (format: 15:00:00):</label>
+        <label for="time">Show Time (format: 15:00):</label>
         <input type="text" id="time" name="time" value="{{ show.Show_Time }}">
         <label for="show_id" >Screen ID:</label>
         <input type="text" id="show_id" name="show_id" value="{{ show.Show_ID }}" style="display:none">
@@ -85,35 +85,44 @@
         <input type="submit" value="Edit Show">
     </form>
 
-    <script>
-        // Function to fetch movie details and populate the combobox
-        function populateMovieNames() {
-            for (let movieId = 1; movieId <= 20; movieId++) {
-                fetch(`/api/movie/${movieId}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Invalid Movie ID');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Populate the combobox with movie names
-                        const movieName = data.Name;
-                        const option = document.createElement('option');
-                        option.text = movieName;
-                        option.value = movieId;
-                        document.getElementById('movie_id').appendChild(option);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        // Stop fetching if invalid movie ID encountered
-                    });
-            }
+<script>
+    // Function to fetch movie details and populate the combobox
+    function populateMovieNames() {
+        for (let movieId = 1; movieId <= 20; movieId++) {
+            fetch(`/api/movie/${movieId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Invalid Movie ID');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Populate the combobox with movie names
+                    const movieName = data.Name;
+                    const option = document.createElement('option');
+                    option.text = movieName;
+                    option.value = movieId;
+                    document.getElementById('movie_id').appendChild(option);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Stop fetching if invalid movie ID encountered
+                });
         }
 
-        // Call the function to populate movie names when the page loads
-        window.onload = populateMovieNames;
-    </script>
+        const timeInput = document.getElementById('time');
+        if (timeInput !== null) {
+            const timeValue = timeInput.value;
+            timeInput.value = timeValue.slice(0, -3);
+        }
+
+    }
+
+    // Call the function to populate movie names when the page loads
+    window.onload = populateMovieNames;
+</script>
+
+    
     <a class="back-btn" href="/admin/management">Back</a>
 </body>
 </html>
